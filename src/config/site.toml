@@ -1,8 +1,8 @@
 [config.site]
-title = "Ren Yuxiang"
-description = "Ren Yuxiang 的个人网站，记录项目、文章与持续学习。"
-pageTitle = "Ren Yuxiang | 个人网站"
-pageDescription = "记录项目、文章与持续学习的个人空间。"
+title = "Yuxiang Ren"
+description = "任宇翔的个人网站，记录软件开发、项目实践与持续学习。"
+pageTitle = "Yuxiang Ren | 任宇翔"
+pageDescription = "北航计算机本科生，关注软件工程、分布式系统、深度学习与全栈开发。"
 url = "https://renyufly.github.io"
 repository = "https://github.com/renyufly/renyufly.github.io"
 footerNote = "基于 Astro 与 Navfolio 构建。"
@@ -118,9 +118,9 @@ pageview = true
 comment = true
 
 [config.profile]
-name = "Ren Yuxiang"
+name = "Yuxiang Ren"
 handle = "@renyufly"
-role = "Developer"
+role = "Software Developer · Student"
 email = "renyufly@users.noreply.github.com"
 website = "https://renyufly.github.io/"
 github = "https://github.com/renyufly"
@@ -153,10 +153,11 @@ text = [
 
 [config.home.intro]
 title = "你好，这里是"
-name = "Ren Yuxiang"
+name = "Yuxiang Ren"
 body = [
-  "这是我的个人网站，用来整理项目、文章与学习记录。",
-  "内容会随着新的实践持续更新。",
+  "我是任宇翔，北航计算机科学与技术专业本科生。",
+  "关注软件工程、分布式系统、深度学习与全栈开发。",
+  "这里用于整理项目、技术文章和持续学习的记录。",
 ]
 
 [config.home.latest]
@@ -210,19 +211,19 @@ tooltip = "" # 未提供公开邮箱，暂时隐藏。
 copy = true
 
 [[config.home.doing]]
-text = "完善个人网站与内容结构"
+text = "学习与实践分布式系统"
 mark = "01"
 
 [[config.home.doing]]
-text = "整理技术笔记与项目经验"
+text = "探索软件工程方法"
 mark = "02"
 
 [[config.home.doing]]
-text = "持续改进静态站点发布流程"
+text = "开展深度学习实践"
 mark = "03"
 
 [[config.home.doing]]
-text = "探索并记录新的开发工具"
+text = "积累全栈开发经验"
 mark = "04"
 
 [[config.home.doing]]

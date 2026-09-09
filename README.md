@@ -1,6 +1,6 @@
 # renyufly.github.io
 
-Ren Yuxiang 的个人网站，基于 [Astro](https://astro.build/) 与
+任宇翔（Yuxiang Ren）的个人网站，基于 [Astro](https://astro.build/) 与
 [Navfolio](https://github.com/dodolalorc/astro-navfolio) 构建，并部署到 GitHub Pages。
 
 ## 本地开发

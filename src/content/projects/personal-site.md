@@ -7,7 +7,7 @@ tags:
   - GitHub Pages
 icon: globe-2
 authors:
-  - name: Ren Yuxiang
+  - name: Yuxiang Ren
 links:
   - label: GitHub
     href: https://github.com/renyufly/renyufly.github.io
