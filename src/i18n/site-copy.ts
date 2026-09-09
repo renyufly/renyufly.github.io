@@ -10,7 +10,7 @@ export const siteCopy = {
       'Yuxiang Ren’s personal website for software development, projects, and continuous learning.',
     pageTitle: 'Yuxiang Ren',
     pageDescription:
-      'Computer Science undergraduate at Beihang University, interested in software engineering, distributed systems, deep learning, and full-stack development.',
+      'Computer Science student at EURECOM, interested in software engineering, distributed systems, deep learning, and full-stack development.',
     footerNote: 'Built with Astro and Navfolio.',
     nav: {
       '/': 'Home',
@@ -39,7 +39,7 @@ export const siteCopy = {
         title: 'I’m ',
         name: 'Yuxiang Ren',
         body: [
-          'I am a Computer Science undergraduate at Beihang University.',
+          'I am a Computer Science student at EURECOM.',
           'I am interested in software engineering, distributed systems, deep learning, and full-stack development.',
           'This site is where I document projects, technical writing, and what I learn along the way.',
         ],
@@ -60,9 +60,9 @@ export const siteCopy = {
     },
   },
   'zh-CN': {
-    description: '任宇翔的个人网站，记录软件开发、项目实践与持续学习。',
-    pageTitle: 'Yuxiang Ren | 任宇翔',
-    pageDescription: '北航计算机本科生，关注软件工程、分布式系统、深度学习与全栈开发。',
+    description: 'Yuxiang Ren的个人网站，记录软件开发、项目实践与持续学习。',
+    pageTitle: 'Yuxiang Ren',
+    pageDescription: 'EURECOM学生，关注软件工程、分布式系统、深度学习与全栈开发。',
     footerNote: '基于 Astro 与 Navfolio 构建。',
     nav: {
       '/': '首页',
@@ -83,7 +83,7 @@ export const siteCopy = {
         subtitle: '持续构建，持续记录。',
         note: '这里展示个人项目、实现过程和相关文档。',
       },
-      about: { title: '关于', description: '关于任宇翔与这个个人网站。' },
+      about: { title: '关于', description: '关于Yuxiang Ren与这个个人网站。' },
     },
     home: {
       quote: ['记录所学，', '展示所做，', '让想法持续生长。'],
@@ -91,7 +91,7 @@ export const siteCopy = {
         title: '你好，这里是 ',
         name: 'Yuxiang Ren',
         body: [
-          '我是任宇翔，北航计算机科学与技术专业本科生。',
+          '我是Yuxiang Ren，EURECOM 计算机科学 学生。',
           '关注软件工程、分布式系统、深度学习与全栈开发。',
           '这里用于整理项目、技术文章和持续学习的记录。',
         ],
@@ -103,9 +103,9 @@ export const siteCopy = {
         { title: 'GitHub', subtitle: '代码、实验与开源项目' },
       ],
       doing: [
-        '学习与实践分布式系统',
-        '探索软件工程方法',
-        '开展深度学习实践',
+        '找寻自我',
+        '四处转转',
+        '学习与实践分布式系统, 开展深度学习实践',
         '积累全栈开发经验',
         '维护个人开源项目',
       ],
