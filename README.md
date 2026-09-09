@@ -236,6 +236,8 @@ bun run build
 draft: false
 ```
 
+> 注意：要使用terminal而不是Github Desktop来commit，避免运行环境识别出错！
+
 然后提交并推送。例如发布博客文章：
 
 ```powershell
