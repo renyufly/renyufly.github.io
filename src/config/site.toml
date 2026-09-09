@@ -2,10 +2,10 @@
 title = "Yuxiang Ren"
 description = "Yuxiang Ren's personal website for software development, projects, and continuous learning."
 pageTitle = "Yuxiang Ren"
-pageDescription = "Computer Science undergraduate at Beihang University, interested in software engineering, distributed systems, deep learning, and full-stack development."
+pageDescription = "Computer Science student at EURECOM, interested in software engineering, distributed systems, deep learning, and full-stack development."
 url = "https://renyufly.github.io"
 repository = "https://github.com/renyufly/renyufly.github.io"
-footerNote = "Built with Astro and Navfolio."
+footerNote = "© 2026- . Built with Astro and Navfolio."
 
 [config.theme]
 # 可用色盘：
@@ -121,7 +121,8 @@ comment = true
 name = "Yuxiang Ren"
 handle = "@renyufly"
 role = "Software Developer · Student"
-email = "renyufly@users.noreply.github.com"
+location = "France, China"
+email = "test@test.com"
 website = "https://renyufly.github.io/"
 github = "https://github.com/renyufly"
 avatar = "/images/logo-thin.webp"
@@ -155,7 +156,7 @@ text = [
 title = "I'm Yuxiang Ren"
 name = "Yuxiang Ren"
 body = [
-  "I am a Computer Science undergraduate at Beihang University.",
+  "I am a Computer Science student at EURECOM.",
   "I am interested in software engineering, distributed systems, deep learning, and full-stack development.",
   "This site is where I document projects, technical writing, and what I learn along the way.",
 ]
@@ -193,9 +194,27 @@ subtitle = "Code, experiments, and open source"
 href = "https://github.com/renyufly"
 
 [[config.home.links]]
+label = "LinkedIn"
+icon = "linkedin"
+tooltip = "https://www.linkedin.com/in/yuxiang-ren-renyufly/" # Empty tooltip hides this link item.
+copy = false
+
+[[config.home.links]]
 label = "GitHub"
 icon = "github"
 tooltip = "https://github.com/renyufly"
+copy = false
+
+[[config.home.links]]
+label = "Website"
+icon = "compass"
+tooltip = "https://renyufly.github.io/"
+copy = false
+
+[[config.home.links]]
+label = "Blog"
+icon = "book"
+tooltip = "/blog"
 copy = false
 
 [[config.home.links]]
@@ -210,22 +229,54 @@ icon = "mail"
 tooltip = "" # 未提供公开邮箱，暂时隐藏。
 copy = true
 
+
+
+[[config.home.links]]
+label = "X"
+icon = "x"
+tooltip = "" # Empty tooltip hides this link item.
+copy = false
+
+[[config.home.links]]
+label = "WeChat"
+icon = "wechat"
+tooltip = "" # Empty tooltip hides this link item.
+copy = true
+
+[[config.home.links]]
+label = "Xiaohongshu"
+icon = "xiaohongshu"
+tooltip = "" # Empty tooltip hides this link item.
+copy = false
+
+[[config.home.links]]
+label = "Zhihu"
+icon = "zhihu"
+tooltip = "" # Empty tooltip hides this link item.
+copy = false
+
+[[config.home.links]]
+label = "Bilibili"
+icon = "bilibili"
+tooltip = "" # Empty tooltip hides this link item.
+copy = false
+
 [[config.home.doing]]
-text = "Learning and practicing distributed systems"
+text = "Find myself."
 mark = "01"
 
 [[config.home.doing]]
-text = "Exploring software engineering methods"
+text = "Travel around."
 mark = "02"
 
 [[config.home.doing]]
-text = "Working on deep-learning projects"
+text = "Exploring distributed systems, deep-learning."
 mark = "03"
 
 [[config.home.doing]]
-text = "Building full-stack development experience"
+text = "Building full-stack development experience."
 mark = "04"
 
 [[config.home.doing]]
-text = "Maintaining personal open-source projects"
+text = "Maintaining personal open-source projects."
 mark = "05"

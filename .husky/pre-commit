@@ -1,3 +1,21 @@
-bunx lint-staged
+#!/usr/bin/env sh
 
-bun run build
+# GUI Git clients on Windows can inherit a different PATH from the terminal.
+# Resolve Bun explicitly so commits work from both GitHub Desktop and shells.
+if command -v bun >/dev/null 2>&1; then
+	BUN_BIN="$(command -v bun)"
+elif [ -x /c/nvm4w/nodejs/bun ]; then
+	BUN_BIN=/c/nvm4w/nodejs/bun
+elif [ -x /c/nvm4w/nodejs/bun.exe ]; then
+	BUN_BIN=/c/nvm4w/nodejs/bun.exe
+elif [ -x "$HOME/.bun/bin/bun.exe" ]; then
+	BUN_BIN="$HOME/.bun/bin/bun.exe"
+elif [ -x "$HOME/.bun/bin/bun" ]; then
+	BUN_BIN="$HOME/.bun/bin/bun"
+else
+	echo "pre-commit: Bun was not found. Install Bun or add it to PATH."
+	exit 127
+fi
+
+"$BUN_BIN" x lint-staged
+"$BUN_BIN" run build

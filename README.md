@@ -1,7 +1,7 @@
 # renyufly.github.io
 
 个人网站，基于 [Astro](https://astro.build/) 与
-[Navfolio](https://github.com/dodolalorc/astro-navfolio) 构建，并部署到 GitHub Pages。
+[Navfolio](https://github.com/dodolalorc/astro-navfolio) , [Navofolio使用说明](https://dodolalorc.cn/projects/astro-navfolio/)构建，并部署到 GitHub Pages。
 
 ## 本地开发
 
@@ -208,6 +208,7 @@ sidebar:
 启动开发服务器：
 
 ```powershell
+bunx astro dev stop    # 关闭之前(如有)
 bun run dev
 ```
 
@@ -272,3 +273,28 @@ language: en
 目前不同语言的内容会共同显示在同一个 Blog 或 Projects 列表中。如果以后需要同一篇内容的中英文版本，建议创建两个不同 slug 的文件，并在正文中互相链接。
 
 第三方许可信息见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+
+## 常用内容位置
+
+```
+src/config/site.toml        站点配置、个人资料与页面文案
+src/content/about.mdx       关于页面
+src/content/blog/           博客与使用手册
+src/content/projects/       项目入口与项目文档
+src/content/vibe/           轻量动态
+src/content/media/          书、电影、剧集、专辑与播客
+public/images/              Logo、头像与静态图片
+```
+
+项目提供统一的内容脚手架命令：
+
+```
+bun run post:new my-first-post
+bun run project:new my-project
+bun run vibe:new today-cloud
+bun run media:new my-favourite-book
+```
+
+文件名会经过安全处理，并作为初始标题和输出文件名。页面模块同时拥有各自的默认模板，因此新增字段或修改 frontmatter 时，不需要改动脚手架的 TypeScript 实现。
+
+构建结果位于 dist，可以部署到 GitHub Pages、Vercel、Netlify、Cloudflare Pages 或其他静态托管平台。仓库内置的 GitHub Actions 流程会处理项目页的 base 路径，也可以通过 SITE_URL 和 SITE_BASE 手动覆盖。
