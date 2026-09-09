@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Icon from '../Icon.astro';
 import { getSiteConfig } from '../../data/site';
 import { createRecentBlogHeatmap, type HeatmapDay } from '../../utils/blog-heatmap';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage, type UiLanguage } from '../../utils/ui-text';
 
 interface Props {
   weeks?: number;
@@ -12,6 +12,7 @@ interface Props {
   excludeDraft?: boolean;
   dateArchiveBaseHref?: string;
   startDate?: Date | string | null;
+  locale?: UiLanguage;
 }
 
 const {
@@ -21,10 +22,11 @@ const {
   excludeDraft = true,
   dateArchiveBaseHref,
   startDate,
+  locale,
 } = Astro.props;
 const posts = await getCollection('blog', ({ data }) => !excludeDraft || !data.draft);
 const heatmap = createRecentBlogHeatmap(posts, weeks, latestCount, startDate);
-const ui = getUiText(await getSiteConfig());
+const ui = locale ? getUiTextForLanguage(locale) : getUiText(await getSiteConfig());
 const heatmapLabel = startDate
   ? ui.heatmap.writingSince(heatmap.startDate)
   : ui.heatmap.recentWeeks(heatmap.weeks);

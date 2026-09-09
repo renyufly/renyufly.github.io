@@ -8,7 +8,7 @@ import SmartImage from '../SmartImage.astro';
 import { getSiteConfig } from '../../data/site';
 import { slugifyGroupName } from '../../utils/content-groups';
 import { isStickyEntry } from '../../utils/content-dates';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 import '@navfolio/theme-default/styles/blog-post-list.css';
 
 type BlogPost = CollectionEntry<'blog'>;
@@ -25,6 +25,7 @@ const { posts, postOffset = 0, coverImageStyle = 'card', listTag = 'ul' } = Astr
 const ListTag = listTag;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 
 function withBase(href: string) {
   if (href === '/') {
@@ -62,7 +63,8 @@ function withBase(href: string) {
                 {isStickyEntry(post) && (
                   <span class="post-pin">
                     <Icon name="pin" size={18} />
-                    {ui.article.pinned}
+                    <span data-locale-copy="en">{ui.article.pinned}</span>
+                    <span data-locale-copy="zh-CN">{zhUi.article.pinned}</span>
                   </span>
                 )}
               </h2>
@@ -72,7 +74,10 @@ function withBase(href: string) {
                 </MetadataItem>
                 {post.data.categories.length > 0 && (
                   <MetadataItem kind="categories" class="post-groups">
-                    <span class="meta-label">{ui.groups.categories}</span>
+                    <span class="meta-label">
+                      <span data-locale-copy="en">{ui.groups.categories}</span>
+                      <span data-locale-copy="zh-CN">{zhUi.groups.categories}</span>
+                    </span>
                     {post.data.categories.map((category) => (
                       <a
                         class="post-group"
@@ -85,7 +90,10 @@ function withBase(href: string) {
                 )}
                 {post.data.series.length > 0 && (
                   <MetadataItem kind="series" class="post-groups">
-                    <span class="meta-label">{ui.groups.series}</span>
+                    <span class="meta-label">
+                      <span data-locale-copy="en">{ui.groups.series}</span>
+                      <span data-locale-copy="zh-CN">{zhUi.groups.series}</span>
+                    </span>
                     {post.data.series.map((series) => (
                       <a
                         class="post-group"

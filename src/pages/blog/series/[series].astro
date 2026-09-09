@@ -8,7 +8,7 @@ import BlogTopNav from '../../../components/blog/BlogTopNav.astro';
 import SeriesProgress from '../../../components/blog/SeriesProgress.astro';
 import { getSiteConfig } from '../../../data/site';
 import { getAllSeries, getPostsBySeries } from '../../../utils/content-groups';
-import { getUiText } from '../../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../../utils/ui-text';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -28,6 +28,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog;
 const { series, posts } = Astro.props;
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 <!doctype html>
@@ -56,16 +57,27 @@ const ui = getUiText(siteConfig);
   <body>
     <BlogTopNav />
     <main data-pagefind-body>
-      <BackLink href="/blog/series/" label={ui.groups.back} />
+      <span data-locale-copy="en"><BackLink href="/blog/series/" label={ui.groups.back} /></span
+      ><span data-locale-copy="zh-CN"
+        ><BackLink href="/blog/series/" label={zhUi.groups.back} /></span
+      >
       <header class="archive-hero archive-header-shared page-header-spacing">
         <div class="archive-header-main series-detail-header">
           <div>
-            <p class="archive-kicker">{ui.groups.series}</p>
+            <p class="archive-kicker">
+              <span data-locale-copy="en">{ui.groups.series}</span><span data-locale-copy="zh-CN"
+                >{zhUi.groups.series}</span
+              >
+            </p>
             <h1 class="archive-title">{series.name}</h1>
           </div>
           <SeriesProgress current={posts.length} total={posts.length} />
         </div>
-        <p class="archive-note">{ui.groups.seriesNote(posts.length)}</p>
+        <p class="archive-note">
+          <span data-locale-copy="en">{ui.groups.seriesNote(posts.length)}</span><span
+            data-locale-copy="zh-CN">{zhUi.groups.seriesNote(posts.length)}</span
+          >
+        </p>
       </header>
 
       <BlogPostList posts={posts} coverImageStyle={pageMeta.coverImageStyle} listTag="ol" />

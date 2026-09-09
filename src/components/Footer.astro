@@ -1,8 +1,11 @@
 ---
 import ThemeFooter from '@navfolio/theme-default/components/Footer.astro';
 import { getSiteConfig } from '../data/site';
+import { siteCopy } from '../i18n/site-copy';
 
 const { profile, site } = await getSiteConfig();
+const zhSite = { ...site, ...siteCopy['zh-CN'] };
 ---
 
-<ThemeFooter site={site} profile={profile} />
+<div data-locale-copy="en"><ThemeFooter site={site} profile={profile} /></div>
+<div data-locale-copy="zh-CN"><ThemeFooter site={zhSite} profile={profile} /></div>

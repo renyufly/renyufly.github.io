@@ -8,7 +8,7 @@ import GroupNav from '../../../components/blog/GroupNav.astro';
 import SeriesCard from '../../../components/blog/SeriesCard.astro';
 import { getSiteConfig } from '../../../data/site';
 import { getAllSeries } from '../../../utils/content-groups';
-import { getUiText } from '../../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../../utils/ui-text';
 
 const siteConfig = await getSiteConfig();
 const { site, theme, pages } = siteConfig;
@@ -16,6 +16,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog;
 const series = getAllSeries(await getCollection('blog', ({ data }) => !data.draft));
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 <!doctype html>
@@ -65,10 +66,14 @@ const ui = getUiText(siteConfig);
     <BlogTopNav />
     <main data-pagefind-body>
       <BlogArchiveHeader
-        kicker={pageMeta.kicker}
-        title={pageMeta.title}
-        subtitle={pageMeta.subtitle}
-        note={pageMeta.note}
+        kicker={ui.groups.followConnectedNotes}
+        title={ui.groups.series}
+        note={ui.groups.emptySeries}
+        zh={{
+          kicker: zhUi.groups.followConnectedNotes,
+          title: zhUi.groups.series,
+          note: zhUi.groups.emptySeries,
+        }}
       />
       <GroupNav activeView="series" />
 
@@ -80,7 +85,12 @@ const ui = getUiText(siteConfig);
             ))}
           </section>
         ) : (
-          <p class="empty-note">{ui.groups.emptySeries}</p>
+          <p class="empty-note">
+            <>
+              <span data-locale-copy="en">{ui.groups.emptySeries}</span>
+              <span data-locale-copy="zh-CN">{zhUi.groups.emptySeries}</span>
+            </>
+          </p>
         )
       }
     </main>

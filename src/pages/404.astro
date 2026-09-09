@@ -12,18 +12,34 @@ function withBase(href: string) {
 }
 ---
 
-<BaseLayout title="404 Not Found" description="这页暂时没有找到，可能已经迁移或还没有写下。">
+<BaseLayout title="404 Not Found" description="This page could not be found.">
   <div class="publication-bg" aria-hidden="true"></div>
   <main class="not-found-shell" aria-labelledby="not-found-title">
     <section class="not-found-panel">
       <p class="not-found-kicker">404 Not Found</p>
-      <h1 id="not-found-title">这页还没有落在纸上</h1>
+      <h1 id="not-found-title">
+        <span data-locale-copy="en">This page has not landed on paper</span><span
+          data-locale-copy="zh-CN">这页还没有落在纸上</span
+        >
+      </h1>
       <p class="not-found-copy">
-        也许链接换了位置，也许这只是一次走岔的小路。先回到熟悉的入口，继续慢慢翻。
+        <span data-locale-copy="en"
+          >The link may have moved, or this may simply be a wrong turn. Head back to a familiar
+          place and keep browsing.</span
+        ><span data-locale-copy="zh-CN"
+          >也许链接换了位置，也许这只是一次走岔的小路。先回到熟悉的入口，继续慢慢翻。</span
+        >
       </p>
       <nav class="not-found-actions" aria-label="404 page links">
-        <a class="primary-link" href={withBase('/')}>回到首页</a>
-        <a href={withBase('/blog')}>去博客</a>
+        <a class="primary-link" href={withBase('/')}
+          ><span data-locale-copy="en">Back home</span><span data-locale-copy="zh-CN">回到首页</span
+          ></a
+        >
+        <a href={withBase('/blog')}
+          ><span data-locale-copy="en">Go to the blog</span><span data-locale-copy="zh-CN"
+            >去博客</span
+          ></a
+        >
       </nav>
     </section>
   </main>

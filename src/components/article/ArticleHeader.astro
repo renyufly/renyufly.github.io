@@ -6,16 +6,19 @@ import Icon from '../Icon.astro';
 import MetadataItem from '../MetadataItem.astro';
 import { getSiteConfig } from '../../data/site';
 import { slugifyGroupName } from '../../utils/content-groups';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 type TagLink = string | { name: string; slug: string };
 
 interface Props {
   title: string;
+  titleZh?: string;
   description?: string;
+  descriptionZh?: string;
   date?: Date;
   wordCount: number;
   readingTime: string;
+  readingTimeZh?: string;
   tags?: TagLink[];
   categories?: { name: string; slug: string }[];
   series?: { name: string; slug: string; current?: number; total?: number }[];
@@ -23,17 +26,22 @@ interface Props {
   showHeroImage?: boolean;
   variant?: 'default' | 'archive';
   kicker?: string;
+  kickerZh?: string;
   note?: string;
+  noteZh?: string;
   pathname?: string;
   showPageView?: boolean;
 }
 
 const {
   title,
+  titleZh,
   description,
+  descriptionZh,
   date,
   wordCount,
   readingTime,
+  readingTimeZh = readingTime,
   tags = [],
   categories = [],
   series = [],
@@ -41,7 +49,9 @@ const {
   showHeroImage = true,
   variant = 'default',
   kicker = 'Notebook entry',
+  kickerZh,
   note,
+  noteZh,
   pathname = Astro.url.pathname,
   showPageView = false,
 } = Astro.props;
@@ -55,7 +65,9 @@ const hasGroups = hasCategories || hasSeries;
 const isArchiveHeader = variant === 'archive';
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 const wordCountLabel = ui.article.wordCount(wordCount);
+const wordCountLabelZh = zhUi.article.wordCount(wordCount);
 ---
 
 <header
@@ -68,9 +80,17 @@ const wordCountLabel = ui.article.wordCount(wordCount);
     isArchiveHeader ? (
       <>
         <div class="archive-heading archive-header-main">
-          <p class="archive-kicker">{kicker}</p>
+          <p class="archive-kicker">
+            <>
+              <span data-locale-copy="en">{kicker}</span>
+              <span data-locale-copy="zh-CN">{kickerZh ?? kicker}</span>
+            </>
+          </p>
           <h1 class="archive-title" data-pagefind-meta="title">
-            {title}
+            <>
+              <span data-locale-copy="en">{title}</span>
+              <span data-locale-copy="zh-CN">{titleZh ?? title}</span>
+            </>
           </h1>
           <div class="meta-line" aria-label={ui.article.metadata}>
             {date && (
@@ -79,9 +99,17 @@ const wordCountLabel = ui.article.wordCount(wordCount);
               </MetadataItem>
             )}
             <MetadataItem kind="words" separated={Boolean(date)}>
-              {wordCountLabel}
+              <>
+                <span data-locale-copy="en">{wordCountLabel}</span>
+                <span data-locale-copy="zh-CN">{wordCountLabelZh}</span>
+              </>
             </MetadataItem>
-            <MetadataItem kind="reading">{readingTime}</MetadataItem>
+            <MetadataItem kind="reading">
+              <>
+                <span data-locale-copy="en">{readingTime}</span>
+                <span data-locale-copy="zh-CN">{readingTimeZh}</span>
+              </>
+            </MetadataItem>
             {showPageView && <PageView pathname={pathname} />}
             {hasTags && (
               <MetadataItem kind="tags" class="tag-list">
@@ -98,7 +126,10 @@ const wordCountLabel = ui.article.wordCount(wordCount);
               {hasCategories && (
                 <span class="group-meta-item">
                   <Icon name="folder" size={15} />
-                  <span class="group-label">{ui.groups.categories}</span>
+                  <span class="group-label">
+                    <span data-locale-copy="en">{ui.groups.categories}</span>
+                    <span data-locale-copy="zh-CN">{zhUi.groups.categories}</span>
+                  </span>
                   <span class="group-list">
                     {categories.map((category) => (
                       <a class="group-link" href={`${basePath}/blog/categories/${category.slug}/`}>
@@ -111,7 +142,10 @@ const wordCountLabel = ui.article.wordCount(wordCount);
               {hasSeries && (
                 <span class="group-meta-item">
                   <Icon name="layers" size={15} />
-                  <span class="group-label">{ui.groups.series}</span>
+                  <span class="group-label">
+                    <span data-locale-copy="en">{ui.groups.series}</span>
+                    <span data-locale-copy="zh-CN">{zhUi.groups.series}</span>
+                  </span>
                   <span class="group-list">
                     {series.map((item) => (
                       <a class="group-link" href={`${basePath}/blog/series/${item.slug}/`}>
@@ -127,14 +161,29 @@ const wordCountLabel = ui.article.wordCount(wordCount);
         </div>
         {(description || note) && (
           <div class="archive-copy">
-            {description && <p class="archive-subtitle">{description}</p>}
-            {note && <p class="archive-note">{note}</p>}
+            {description && (
+              <p class="archive-subtitle">
+                <span data-locale-copy="en">{description}</span>
+                <span data-locale-copy="zh-CN">{descriptionZh ?? description}</span>
+              </p>
+            )}
+            {note && (
+              <p class="archive-note">
+                <span data-locale-copy="en">{note}</span>
+                <span data-locale-copy="zh-CN">{noteZh ?? note}</span>
+              </p>
+            )}
           </div>
         )}
       </>
     ) : (
       <>
-        <h1 data-pagefind-meta="title">{title}</h1>
+        <h1 data-pagefind-meta="title">
+          <>
+            <span data-locale-copy="en">{title}</span>
+            <span data-locale-copy="zh-CN">{titleZh ?? title}</span>
+          </>
+        </h1>
 
         <div class="meta-line" aria-label={ui.article.metadata}>
           {date && (
@@ -143,9 +192,17 @@ const wordCountLabel = ui.article.wordCount(wordCount);
             </MetadataItem>
           )}
           <MetadataItem kind="words" separated={Boolean(date)}>
-            {wordCountLabel}
+            <>
+              <span data-locale-copy="en">{wordCountLabel}</span>
+              <span data-locale-copy="zh-CN">{wordCountLabelZh}</span>
+            </>
           </MetadataItem>
-          <MetadataItem kind="reading">{readingTime}</MetadataItem>
+          <MetadataItem kind="reading">
+            <>
+              <span data-locale-copy="en">{readingTime}</span>
+              <span data-locale-copy="zh-CN">{readingTimeZh}</span>
+            </>
+          </MetadataItem>
           {showPageView && <PageView pathname={pathname} />}
           {hasTags && (
             <MetadataItem kind="tags" class="tag-list">
@@ -162,7 +219,10 @@ const wordCountLabel = ui.article.wordCount(wordCount);
             {hasCategories && (
               <span class="group-meta-item">
                 <Icon name="folder" size={15} />
-                <span class="group-label">{ui.groups.categories}</span>
+                <span class="group-label">
+                  <span data-locale-copy="en">{ui.groups.categories}</span>
+                  <span data-locale-copy="zh-CN">{zhUi.groups.categories}</span>
+                </span>
                 <span class="group-list">
                   {categories.map((category) => (
                     <a class="group-link" href={`${basePath}/blog/categories/${category.slug}/`}>
@@ -175,7 +235,10 @@ const wordCountLabel = ui.article.wordCount(wordCount);
             {hasSeries && (
               <span class="group-meta-item">
                 <Icon name="layers" size={15} />
-                <span class="group-label">{ui.groups.series}</span>
+                <span class="group-label">
+                  <span data-locale-copy="en">{ui.groups.series}</span>
+                  <span data-locale-copy="zh-CN">{zhUi.groups.series}</span>
+                </span>
                 <span class="group-list">
                   {series.map((item) => (
                     <a class="group-link" href={`${basePath}/blog/series/${item.slug}/`}>

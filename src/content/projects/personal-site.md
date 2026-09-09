@@ -2,6 +2,7 @@
 title: 个人网站
 description: 使用 Astro 与 Navfolio 构建的个人内容空间。
 date: 2026-09-09
+language: zh-CN
 tags:
   - Astro
   - GitHub Pages

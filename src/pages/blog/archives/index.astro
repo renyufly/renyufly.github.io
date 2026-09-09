@@ -8,7 +8,7 @@ import GroupNav from '../../../components/blog/GroupNav.astro';
 import { getSiteConfig } from '../../../data/site';
 import { slugifyGroupName } from '../../../utils/content-groups';
 import { sortByDateDesc } from '../../../utils/content-dates';
-import { getUiText } from '../../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../../utils/ui-text';
 
 const siteConfig = await getSiteConfig();
 const { site, theme, pages } = siteConfig;
@@ -16,6 +16,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog;
 const posts = sortByDateDesc(await getCollection('blog', ({ data }) => !data.draft));
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const pageTitle = ui.groups.yearArchives;
 const pageNote = ui.groups.yearArchivesNote;
@@ -188,10 +189,14 @@ function formatMonthDay(date: Date) {
     <BlogTopNav />
     <main data-pagefind-body>
       <BlogArchiveHeader
-        kicker={pageMeta.kicker}
-        title={pageMeta.title}
-        subtitle={pageMeta.subtitle}
-        note={pageMeta.note}
+        kicker={ui.groups.yearArchivesKicker}
+        title={pageTitle}
+        note={pageNote}
+        zh={{
+          kicker: zhUi.groups.yearArchivesKicker,
+          title: zhUi.groups.yearArchives,
+          note: zhUi.groups.yearArchivesNote,
+        }}
       />
       <GroupNav activeView="archives" />
 
@@ -202,7 +207,12 @@ function formatMonthDay(date: Date) {
               <section class="year-group" aria-labelledby={`archive-${year}`}>
                 <header class="year-heading">
                   <h2 id={`archive-${year}`}>{year}</h2>
-                  <span>{ui.groups.articleCount(yearPosts.length)}</span>
+                  <span>
+                    <span data-locale-copy="en">{ui.groups.articleCount(yearPosts.length)}</span>
+                    <span data-locale-copy="zh-CN">
+                      {zhUi.groups.articleCount(yearPosts.length)}
+                    </span>
+                  </span>
                 </header>
                 <ol class="archive-list">
                   {yearPosts.map((post) => (
@@ -227,7 +237,12 @@ function formatMonthDay(date: Date) {
             ))}
           </section>
         ) : (
-          <p class="empty-note">{ui.groups.emptyArchives}</p>
+          <p class="empty-note">
+            <>
+              <span data-locale-copy="en">{ui.groups.emptyArchives}</span>
+              <span data-locale-copy="zh-CN">{zhUi.groups.emptyArchives}</span>
+            </>
+          </p>
         )
       }
     </main>

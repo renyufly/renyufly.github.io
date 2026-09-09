@@ -22,6 +22,7 @@ import navfolioConfig from '../../../navfolio.config';
 import { getPageModuleRoute } from '../../plugins/config';
 import { sortBlogPostsForArchive } from '../../utils/content-dates';
 import { getI18n } from '../../utils/ui-text';
+import { siteCopy } from '../../i18n/site-copy';
 
 const siteConfig = await getSiteConfig();
 const { pages } = siteConfig;
@@ -82,7 +83,11 @@ function withBase(href: string) {
   sidebar={{ enable: false, ...projectIndex.data.sidebar }}
   headerVariant="archive"
   headerKicker={pageMeta.kicker}
+  headerKickerZh={siteCopy['zh-CN'].pages.projects.kicker}
   headerNote={pageMeta.note}
+  headerNoteZh={siteCopy['zh-CN'].pages.projects.note}
+  titleZh={siteCopy['zh-CN'].pages.projects.title}
+  descriptionZh={siteCopy['zh-CN'].pages.projects.subtitle}
   contentFont="ui"
 >
   <Content />

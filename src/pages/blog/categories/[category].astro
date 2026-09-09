@@ -13,6 +13,7 @@ import {
 } from '../../../utils/content-groups';
 import { sortBlogPostsForArchive } from '../../../utils/content-dates';
 import { getUiText } from '../../../utils/ui-text';
+import { siteCopy } from '../../../i18n/site-copy';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -76,6 +77,7 @@ const categoryName =
         headerTitle={pageMeta.title}
         headerSubtitle={pageMeta.subtitle}
         headerNote={pageMeta.note}
+        headerZh={siteCopy['zh-CN'].pages.blog}
         coverImageStyle={pageMeta.coverImageStyle}
       >
         <GroupNav slot="after-header" activeCategory={category.slug} />

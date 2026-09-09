@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import BlogArchiveHeader from './BlogArchiveHeader.astro';
 import BlogPostList from './BlogPostList.astro';
 import { getSiteConfig } from '../../data/site';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 import { getPaginationItems } from '../../utils/pagination';
 import '@navfolio/theme-default/styles/blog-archive.css';
 
@@ -31,6 +31,7 @@ interface Props {
   headerTitle?: string;
   headerSubtitle?: string;
   headerNote?: string;
+  headerZh?: { kicker?: string; title?: string; subtitle?: string; note?: string };
   coverImageStyle?: CoverImageStyle;
 }
 
@@ -41,11 +42,13 @@ const {
   headerTitle = 'Writing notes',
   headerSubtitle,
   headerNote,
+  headerZh,
   coverImageStyle = 'card',
 } = Astro.props;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const hasPagination = page.lastPage > 1;
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 
 function withBase(href: string) {
   if (href === '/') {
@@ -65,6 +68,7 @@ function getPageHref(pageNumber: number) {
   title={headerTitle}
   subtitle={headerSubtitle}
   note={headerNote}
+  zh={headerZh}
 />
 <slot name="after-header" />
 <section>
@@ -78,7 +82,10 @@ function getPageHref(pageNumber: number) {
         href={page.url.prev ? withBase(page.url.prev) : undefined}
         aria-disabled={!page.url.prev}
       >
-        {ui.pagination.previous}
+        <>
+          <span data-locale-copy="en">{ui.pagination.previous}</span>
+          <span data-locale-copy="zh-CN">{zhUi.pagination.previous}</span>
+        </>
       </a>
       <div
         class="pagination-pages"
@@ -112,7 +119,10 @@ function getPageHref(pageNumber: number) {
         href={page.url.next ? withBase(page.url.next) : undefined}
         aria-disabled={!page.url.next}
       >
-        {ui.pagination.next}
+        <>
+          <span data-locale-copy="en">{ui.pagination.next}</span>
+          <span data-locale-copy="zh-CN">{zhUi.pagination.next}</span>
+        </>
       </a>
     </nav>
   )

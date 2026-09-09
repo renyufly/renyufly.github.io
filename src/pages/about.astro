@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BlogArticle from '../layouts/BlogArticle.astro';
+import { siteCopy } from '../i18n/site-copy';
 
 const [about] = await getCollection('about');
 
@@ -16,6 +17,8 @@ const { Content, headings } = await render(about);
   headings={headings}
   sidebar={{ enable: false, ...about.data.sidebar }}
   contentFont="ui"
+  titleZh={siteCopy['zh-CN'].pages.about.title}
+  descriptionZh={siteCopy['zh-CN'].pages.about.description}
 >
   <Content />
 </BlogArticle>

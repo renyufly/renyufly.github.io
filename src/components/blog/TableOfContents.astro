@@ -2,7 +2,7 @@
 import TocTree from './TocTree.astro';
 import { getSiteConfig } from '../../data/site';
 import { countTocItems, type TocItem } from '../../utils/toc-tree';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 interface Props {
   items: TocItem[];
@@ -18,6 +18,7 @@ const canCollapse = collapsible && countTocItems(items) > 3;
 const listId = collapsible ? 'mobile-article-toc-list' : undefined;
 const treeIdPrefix = collapsible ? 'article-toc' : 'sidebar-toc';
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 {
@@ -34,7 +35,12 @@ const ui = getUiText(await getSiteConfig());
       data-expand-label={ui.toc.showAll}
       data-collapse-label={ui.toc.collapseButton}
     >
-      <h2>{ui.toc.title}</h2>
+      <h2>
+        <>
+          <span data-locale-copy="en">{ui.toc.title}</span>
+          <span data-locale-copy="zh-CN">{zhUi.toc.title}</span>
+        </>
+      </h2>
       <div id={listId} class="toc-list-wrap" data-toc-scroll>
         <TocTree items={items} idPrefix={treeIdPrefix} />
       </div>
@@ -47,7 +53,10 @@ const ui = getUiText(await getSiteConfig());
           aria-controls={listId}
           data-toc-expand
         >
-          <span data-expand-label>{ui.toc.showAll}</span>
+          <span data-expand-label>
+            <span data-locale-copy="en">{ui.toc.showAll}</span>
+            <span data-locale-copy="zh-CN">{zhUi.toc.showAll}</span>
+          </span>
           <i aria-hidden="true" />
         </button>
       )}

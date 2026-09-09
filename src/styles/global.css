@@ -1,2 +1,24 @@
 @import './fonts.css';
 @import 'katex/dist/katex.min.css';
+
+/* English is the static and no-JavaScript fallback. Locale copy uses display: contents
+   so it can safely wrap both inline labels and groups of block elements. */
+[data-locale-copy='zh-CN'] {
+  display: none !important;
+}
+
+div[data-locale-copy='en'] {
+  display: contents !important;
+}
+
+html[data-locale='zh-CN'] [data-locale-copy='en'] {
+  display: none !important;
+}
+
+html[data-locale='zh-CN'] [data-locale-copy='zh-CN'] {
+  display: revert !important;
+}
+
+html[data-locale='zh-CN'] div[data-locale-copy='zh-CN'] {
+  display: contents !important;
+}

@@ -14,13 +14,14 @@ import { resolveCommentsConfig, supportsCommentSection } from '../utils/comments
 import { sortByDateDesc } from '../utils/content-dates';
 import { getSeriesContext, slugifyGroupName } from '../utils/content-groups';
 import { buildTocTree, countTocItems } from '../utils/toc-tree';
-import { getUiText } from '../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../utils/ui-text';
 import '@navfolio/theme-default/styles/blog-article.css';
 
 const siteConfig = await getSiteConfig();
 const { comments: rawComments } = siteConfig;
 const comments = resolveCommentsConfig(rawComments);
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 
 type SidebarConfig = {
   enable?: boolean;
@@ -51,9 +52,13 @@ interface Props {
   sidebar?: SidebarConfig;
   headerVariant?: 'default' | 'archive';
   headerKicker?: string;
+  headerKickerZh?: string;
   headerNote?: string;
+  headerNoteZh?: string;
   title?: string;
+  titleZh?: string;
   description?: string;
+  descriptionZh?: string;
   date?: Date;
   heroImage?: ImageMetadata | string;
   showHeroImage?: boolean;
@@ -95,6 +100,7 @@ const cjkChars =
 const wordCount = englishWords.length + cjkChars.length;
 const readingMinutes = Math.max(1, Math.ceil(englishWords.length / 220 + cjkChars.length / 500));
 const readingTime = ui.article.readingTime(readingMinutes);
+const readingTimeZh = zhUi.article.readingTime(readingMinutes);
 const tags = post.data.tags ?? [];
 const tagLinks = tags.map((name) => ({
   name,
@@ -162,6 +168,7 @@ const hasSidebar = shouldRenderSidebar && hasToc;
             date={date}
             wordCount={wordCount}
             readingTime={readingTime}
+            readingTimeZh={readingTimeZh}
             tags={tagLinks}
             categories={categoryLinks}
             series={seriesLinks}
@@ -169,7 +176,11 @@ const hasSidebar = shouldRenderSidebar && hasToc;
             showHeroImage={showHeroImage}
             variant={props.headerVariant}
             kicker={props.headerKicker}
+            kickerZh={props.headerKickerZh}
             note={props.headerNote}
+            noteZh={props.headerNoteZh}
+            titleZh={props.titleZh}
+            descriptionZh={props.descriptionZh}
             pathname={Astro.url.pathname}
             showPageView={isBlogPost}
           />
@@ -197,7 +208,14 @@ const hasSidebar = shouldRenderSidebar && hasToc;
               >
                 {seriesContext.prev ? (
                   <a href={`${basePath}/blog/${seriesContext.prev.id}/`}>
-                    <small>{ui.article.previousInSeries(seriesContext.name)}</small>
+                    <small>
+                      <span data-locale-copy="en">
+                        {ui.article.previousInSeries(seriesContext.name)}
+                      </span>
+                      <span data-locale-copy="zh-CN">
+                        {zhUi.article.previousInSeries(seriesContext.name)}
+                      </span>
+                    </small>
                     <span>{seriesContext.prev.data.title}</span>
                   </a>
                 ) : (
@@ -205,7 +223,14 @@ const hasSidebar = shouldRenderSidebar && hasToc;
                 )}
                 {seriesContext.next ? (
                   <a href={`${basePath}/blog/${seriesContext.next.id}/`} class="next">
-                    <small>{ui.article.nextInSeries(seriesContext.name)}</small>
+                    <small>
+                      <span data-locale-copy="en">
+                        {ui.article.nextInSeries(seriesContext.name)}
+                      </span>
+                      <span data-locale-copy="zh-CN">
+                        {zhUi.article.nextInSeries(seriesContext.name)}
+                      </span>
+                    </small>
                     <span>{seriesContext.next.data.title}</span>
                   </a>
                 ) : (

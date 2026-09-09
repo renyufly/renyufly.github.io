@@ -7,7 +7,7 @@ import BlogTopNav from '../../../components/blog/BlogTopNav.astro';
 import CategoryCard from '../../../components/blog/CategoryCard.astro';
 import { getSiteConfig } from '../../../data/site';
 import { getAllCategories } from '../../../utils/content-groups';
-import { getUiText } from '../../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../../utils/ui-text';
 
 const siteConfig = await getSiteConfig();
 const { site, theme, pages } = siteConfig;
@@ -15,6 +15,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog.categories;
 const categories = getAllCategories(await getCollection('blog', ({ data }) => !data.draft));
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 <!doctype html>
@@ -63,15 +64,34 @@ const ui = getUiText(siteConfig);
   <body>
     <BlogTopNav />
     <main data-pagefind-body>
-      <BackLink href="/blog/" label={ui.groups.back} />
+      <span data-locale-copy="en"><BackLink href="/blog/" label={ui.groups.back} /></span><span
+        data-locale-copy="zh-CN"><BackLink href="/blog/" label={zhUi.groups.back} /></span
+      >
       <header class="archive-hero archive-header-shared page-header-spacing">
         <div class="archive-header-main">
-          <p class="archive-kicker">{pageMeta.kicker}</p>
-          <h1 class="archive-title">{pageMeta.title}</h1>
+          <p class="archive-kicker">
+            <span data-locale-copy="en">{pageMeta.kicker}</span><span data-locale-copy="zh-CN"
+              >浏览文章</span
+            >
+          </p>
+          <h1 class="archive-title">
+            <span data-locale-copy="en">{pageMeta.title}</span><span data-locale-copy="zh-CN"
+              >分类</span
+            >
+          </h1>
         </div>
         <div class="archive-copy">
           {pageMeta.subtitle && <p class="archive-subtitle">{pageMeta.subtitle}</p>}
-          {pageMeta.note && <p class="archive-note">{pageMeta.note}</p>}
+          {
+            pageMeta.note && (
+              <p class="archive-note">
+                <>
+                  <span data-locale-copy="en">{pageMeta.note}</span>
+                  <span data-locale-copy="zh-CN">按主题浏览文章。</span>
+                </>
+              </p>
+            )
+          }
         </div>
       </header>
 
@@ -83,7 +103,12 @@ const ui = getUiText(siteConfig);
             ))}
           </section>
         ) : (
-          <p class="empty-note">{ui.groups.emptyCategories}</p>
+          <p class="empty-note">
+            <>
+              <span data-locale-copy="en">{ui.groups.emptyCategories}</span>
+              <span data-locale-copy="zh-CN">{zhUi.groups.emptyCategories}</span>
+            </>
+          </p>
         )
       }
     </main>

@@ -2,7 +2,7 @@
 import ThemeCategoryCard from '@navfolio/theme-default/components/CategoryCard.astro';
 import { getSiteConfig } from '../../data/site';
 import { uncategorizedCategory } from '../../utils/content-groups';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 interface Props {
   name: string;
@@ -14,12 +14,23 @@ const { name, slug, count } = Astro.props;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const href = `${basePath}/blog/categories/${slug}/`;
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 const displayName = slug === uncategorizedCategory.slug ? ui.groups.uncategorized : name;
 ---
 
-<ThemeCategoryCard
-  href={href}
-  categoryLabel={ui.groups.category}
-  name={displayName}
-  articleCount={ui.groups.articleCount(count)}
-/>
+<div data-locale-copy="en">
+  <ThemeCategoryCard
+    href={href}
+    categoryLabel={ui.groups.category}
+    name={displayName}
+    articleCount={ui.groups.articleCount(count)}
+  />
+</div>
+<div data-locale-copy="zh-CN">
+  <ThemeCategoryCard
+    href={href}
+    categoryLabel={zhUi.groups.category}
+    name={slug === uncategorizedCategory.slug ? zhUi.groups.uncategorized : name}
+    articleCount={zhUi.groups.articleCount(count)}
+  />
+</div>

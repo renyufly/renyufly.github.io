@@ -1,18 +1,18 @@
 [config.site]
 title = "Yuxiang Ren"
-description = "任宇翔的个人网站，记录软件开发、项目实践与持续学习。"
-pageTitle = "Yuxiang Ren | 任宇翔"
-pageDescription = "北航计算机本科生，关注软件工程、分布式系统、深度学习与全栈开发。"
+description = "Yuxiang Ren's personal website for software development, projects, and continuous learning."
+pageTitle = "Yuxiang Ren"
+pageDescription = "Computer Science undergraduate at Beihang University, interested in software engineering, distributed systems, deep learning, and full-stack development."
 url = "https://renyufly.github.io"
 repository = "https://github.com/renyufly/renyufly.github.io"
-footerNote = "基于 Astro 与 Navfolio 构建。"
+footerNote = "Built with Astro and Navfolio."
 
 [config.theme]
 # 可用色盘：
 # green-soft, green-vivid, rose-soft, pink-soft, purple-soft, blue-soft, orange-soft, brown-soft
 palette = "green-soft"
 # 原生 UI 语言。可用值：en、zh-CN、zh-TW。未知值会回退到 en。
-lang = "zh-CN"
+lang = "en"
 
 [config.fonts]
 # 英文与代码感 UI 字体
@@ -43,14 +43,14 @@ show_on_posts = true
 [config.search]
 enabled = true
 shortcut = "mod+k"
-placeholder = "搜索文章与项目..."
+placeholder = "Search articles and projects..."
 maxResults = 6
 
 [config.pages.blog]
-title = "文章"
-kicker = "写作归档"
-subtitle = "技术、项目与思考。"
-note = "这里收录值得长期保存的文章和学习记录。"
+title = "Blog"
+kicker = "Writing archive"
+subtitle = "Technology, projects, and ideas."
+note = "Articles and learning notes worth keeping for the long term."
 postsPerPage = 6
 # date-fns 使用的日期格式模板。
 dateFormat = "yyyy-MM-dd"
@@ -60,22 +60,22 @@ metadataSeparator = "icon"
 coverImageStyle = "mask"
 
 [config.pages.blog.categories]
-title = "分类"
-kicker = "浏览文章"
+title = "Categories"
+kicker = "Browse writing"
 subtitle = ""
-note = "按主题浏览文章。"
+note = "Browse articles by topic."
 
 [config.pages.blog.series]
-title = "系列"
-kicker = "阅读路径"
+title = "Series"
+kicker = "Reading paths"
 subtitle = ""
-note = "按顺序阅读相互关联的内容。"
+note = "Read connected articles in order."
 
 [config.pages.projects]
-title = "项目"
-kicker = "作品与实践"
-subtitle = "持续构建，持续记录。"
-note = "这里展示个人项目、实现过程和相关文档。"
+title = "Projects"
+kicker = "Work and practice"
+subtitle = "Keep building. Keep documenting."
+note = "Personal projects, implementation notes, and related documentation."
 
 [config.pages.vibe]
 title = "vibe"
@@ -127,37 +127,37 @@ github = "https://github.com/renyufly"
 avatar = "/images/logo-thin.webp"
 
 [[config.topNav.links]]
-label = "首页"
+label = "Home"
 href = "/"
 
 [[config.topNav.links]]
-label = "文章"
+label = "Blog"
 href = "/blog"
 
 [[config.topNav.links]]
-label = "项目"
+label = "Projects"
 module = "projects"
 
 [[config.topNav.links]]
-label = "关于"
+label = "About"
 href = "/about"
 
 [config.home]
 
 [config.home.quote]
 text = [
-  "记录所学，",
-  "展示所做，",
-  "让想法持续生长。",
+  "Learn in public,",
+  "build with care,",
+  "and keep ideas growing.",
 ]
 
 [config.home.intro]
-title = "你好，这里是"
+title = "I'm Yuxiang Ren"
 name = "Yuxiang Ren"
 body = [
-  "我是任宇翔，北航计算机科学与技术专业本科生。",
-  "关注软件工程、分布式系统、深度学习与全栈开发。",
-  "这里用于整理项目、技术文章和持续学习的记录。",
+  "I am a Computer Science undergraduate at Beihang University.",
+  "I am interested in software engineering, distributed systems, deep learning, and full-stack development.",
+  "This site is where I document projects, technical writing, and what I learn along the way.",
 ]
 
 [config.home.latest]
@@ -170,26 +170,26 @@ dateArchiveBaseHref = ""
 
 [[config.home.navigation]]
 icon = "compass"
-title = "项目"
-subtitle = "作品、实践与实现记录"
+title = "Projects"
+subtitle = "Things I build and how they work"
 href = "/projects"
 
 [[config.home.navigation]]
 icon = "pen"
-title = "文章"
-subtitle = "技术笔记与长期思考"
+title = "Blog"
+subtitle = "Technical notes and long-form thinking"
 href = "/blog"
 
 [[config.home.navigation]]
 icon = "briefcase"
-title = "关于"
-subtitle = "个人介绍与联系方式"
+title = "About"
+subtitle = "Background and ways to reach me"
 href = "/about"
 
 [[config.home.navigation]]
 icon = "github"
 title = "GitHub"
-subtitle = "代码、实验与开源项目"
+subtitle = "Code, experiments, and open source"
 href = "https://github.com/renyufly"
 
 [[config.home.links]]
@@ -211,21 +211,21 @@ tooltip = "" # 未提供公开邮箱，暂时隐藏。
 copy = true
 
 [[config.home.doing]]
-text = "学习与实践分布式系统"
+text = "Learning and practicing distributed systems"
 mark = "01"
 
 [[config.home.doing]]
-text = "探索软件工程方法"
+text = "Exploring software engineering methods"
 mark = "02"
 
 [[config.home.doing]]
-text = "开展深度学习实践"
+text = "Working on deep-learning projects"
 mark = "03"
 
 [[config.home.doing]]
-text = "积累全栈开发经验"
+text = "Building full-stack development experience"
 mark = "04"
 
 [[config.home.doing]]
-text = "维护个人开源项目"
+text = "Maintaining personal open-source projects"
 mark = "05"

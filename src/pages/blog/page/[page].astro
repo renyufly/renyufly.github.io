@@ -8,6 +8,7 @@ import GroupNav from '../../../components/blog/GroupNav.astro';
 import { getSiteConfig } from '../../../data/site';
 import { sortBlogPostsForArchive } from '../../../utils/content-dates';
 import { getHtmlLang } from '../../../utils/ui-text';
+import { siteCopy } from '../../../i18n/site-copy';
 
 export async function getStaticPaths() {
   const { pages } = await getSiteConfig();
@@ -80,6 +81,7 @@ const { page, postOffset } = Astro.props;
         headerTitle={pageMeta.title}
         headerSubtitle={pageMeta.subtitle}
         headerNote={pageMeta.note}
+        headerZh={siteCopy['zh-CN'].pages.blog}
         coverImageStyle={pageMeta.coverImageStyle}
       >
         <GroupNav slot="after-header" />

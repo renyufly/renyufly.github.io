@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-astro';
 import { getSiteConfig, type SiteSearch as SiteSearchConfig } from '../../data/site';
 import navfolioConfig from '../../../navfolio.config';
 import { getPageModuleRoute } from '../../plugins/config';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 interface Props {
   search: SiteSearchConfig;
@@ -11,6 +11,7 @@ interface Props {
 
 const { search } = Astro.props;
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.shortcut;
 const projectsRoute = getPageModuleRoute(navfolioConfig, 'projects');
 const vibeRoute = getPageModuleRoute(navfolioConfig, 'vibe');
@@ -32,6 +33,8 @@ const vibeRoute = getPageModuleRoute(navfolioConfig, 'vibe');
   data-search-route-vibe={vibeRoute}
   data-search-route-projects={projectsRoute}
   data-search-match-label={ui.search.matchedPassage}
+  data-search-en={JSON.stringify(ui.search)}
+  data-search-zh={JSON.stringify(zhUi.search)}
   data-pagefind-ignore
 >
   <button
@@ -57,7 +60,11 @@ const vibeRoute = getPageModuleRoute(navfolioConfig, 'vibe');
     >
       <header class="site-search-head">
         <div>
-          <p id="site-search-title">{ui.search.title}</p>
+          <p id="site-search-title">
+            <span data-locale-copy="en">{ui.search.title}</span><span data-locale-copy="zh-CN"
+              >{zhUi.search.title}</span
+            >
+          </p>
           <span>{shortcutLabel}</span>
         </div>
         <button
@@ -76,6 +83,8 @@ const vibeRoute = getPageModuleRoute(navfolioConfig, 'vibe');
         <input
           type="search"
           placeholder={search.placeholder}
+          data-placeholder-en={search.placeholder}
+          data-placeholder-zh="搜索文章与项目..."
           autocomplete="off"
           spellcheck="false"
           data-site-search-input
@@ -91,7 +100,35 @@ const vibeRoute = getPageModuleRoute(navfolioConfig, 'vibe');
 <script>
   import { initSiteSearch } from '../../utils/site-search';
 
+  const syncSearchLocale = () => {
+    const isZh = document.documentElement.dataset.locale === 'zh-CN';
+    for (const root of document.querySelectorAll<HTMLElement>('[data-site-search-root]')) {
+      const messages = JSON.parse(
+        isZh ? (root.dataset.searchZh ?? '{}') : (root.dataset.searchEn ?? '{}'),
+      );
+      root.dataset.searchIdleLabel = messages.idle;
+      root.dataset.searchLoadingLabel = messages.loading;
+      root.dataset.searchEmptyLabel = messages.empty;
+      root.dataset.searchUnavailableLabel = messages.unavailable;
+      root.dataset.searchKindBlogNote = messages.resultKinds?.blogNote;
+      root.dataset.searchKindBlogIndex = messages.resultKinds?.blogIndex;
+      root.dataset.searchKindVibe = messages.resultKinds?.vibe;
+      root.dataset.searchKindProject = messages.resultKinds?.project;
+      root.dataset.searchKindPage = messages.resultKinds?.page;
+      root.dataset.searchMatchLabel = messages.matchedPassage;
+      const input = root.querySelector<HTMLInputElement>('[data-site-search-input]');
+      if (input)
+        input.placeholder = isZh
+          ? (input.dataset.placeholderZh ?? '')
+          : (input.dataset.placeholderEn ?? '');
+      const status = root.querySelector<HTMLElement>('[data-site-search-status]');
+      if (status && !input?.value) status.textContent = messages.idle;
+    }
+  };
+
+  syncSearchLocale();
   initSiteSearch();
+  document.addEventListener('navfolio:locale-change', syncSearchLocale);
 </script>
 
 <style>

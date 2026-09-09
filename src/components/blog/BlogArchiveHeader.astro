@@ -6,9 +6,24 @@ interface Props {
   title?: string;
   subtitle?: string;
   note?: string;
+  zh?: { kicker?: string; title?: string; subtitle?: string; note?: string };
 }
 
-const { kicker, title, subtitle, note } = Astro.props;
+const { kicker, title, subtitle, note, zh } = Astro.props;
 ---
 
-<ThemeBlogArchiveHeader kicker={kicker} title={title} subtitle={subtitle} note={note} />
+<div data-locale-copy="en">
+  <ThemeBlogArchiveHeader kicker={kicker} title={title} subtitle={subtitle} note={note} />
+</div>
+{
+  zh && (
+    <div data-locale-copy="zh-CN">
+      <ThemeBlogArchiveHeader
+        kicker={zh.kicker ?? kicker}
+        title={zh.title ?? title}
+        subtitle={zh.subtitle ?? subtitle}
+        note={zh.note ?? note}
+      />
+    </div>
+  )
+}

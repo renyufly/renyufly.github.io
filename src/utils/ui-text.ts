@@ -240,6 +240,10 @@ export function getUiText(config: SiteConfig): UiText {
   return uiText[getUiLanguage(config)];
 }
 
+export function getUiTextForLanguage(language: UiLanguage): UiText {
+  return uiText[language];
+}
+
 export function getI18n(config: SiteConfig) {
   return createI18n({
     locale: getUiLanguage(config),

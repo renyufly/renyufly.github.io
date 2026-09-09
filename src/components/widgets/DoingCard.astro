@@ -1,24 +1,35 @@
 ---
 import Icon from '../Icon.astro';
 import { getSiteConfig } from '../../data/site';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 interface DoingItem {
   text: string;
   mark: string;
 }
 
-const { items } = Astro.props as { items: DoingItem[] };
+const { items, zhItems = [] } = Astro.props as { items: DoingItem[]; zhItems?: DoingItem[] };
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 <article class="glass-card doing-card">
-  <h2><Icon name="calendar" /> {ui.doing.recently}</h2>
+  <h2>
+    <Icon name="calendar" />
+    <span data-locale-copy="en">{ui.doing.recently}</span><span data-locale-copy="zh-CN"
+      >{zhUi.doing.recently}</span
+    >
+  </h2>
   <ul>
     {
-      items.map((item) => (
+      items.map((item, index) => (
         <li>
-          <span>{item.text}</span>
+          <span>
+            <>
+              <span data-locale-copy="en">{item.text}</span>
+              <span data-locale-copy="zh-CN">{zhItems[index]?.text ?? item.text}</span>
+            </>
+          </span>
           <strong aria-hidden="true">{item.mark}</strong>
         </li>
       ))

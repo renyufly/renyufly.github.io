@@ -7,7 +7,7 @@ import BlogTopNav from '../../../components/blog/BlogTopNav.astro';
 import GroupNav from '../../../components/blog/GroupNav.astro';
 import { getSiteConfig } from '../../../data/site';
 import { getAllTags } from '../../../utils/content-groups';
-import { getUiText } from '../../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../../utils/ui-text';
 
 const tagColors = [
   '#2f8f5b',
@@ -38,6 +38,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog;
 const tags = getAllTags(await getCollection('blog', ({ data }) => !data.draft));
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 const maxCount = Math.max(1, ...tags.map((tag) => tag.count));
 const minCount = Math.min(...tags.map((tag) => tag.count), maxCount);
 const countRange = Math.max(1, maxCount - minCount);
@@ -167,10 +168,14 @@ function getTagWeight(count: number) {
     <BlogTopNav />
     <main data-pagefind-body>
       <BlogArchiveHeader
-        kicker={pageMeta.kicker}
-        title={pageMeta.title}
-        subtitle={pageMeta.subtitle}
-        note={pageMeta.note}
+        kicker={ui.groups.tagCloudKicker}
+        title={pageTitle}
+        note={pageNote}
+        zh={{
+          kicker: zhUi.groups.tagCloudKicker,
+          title: zhUi.groups.tagCloud,
+          note: zhUi.groups.tagCloudNote,
+        }}
       />
       <GroupNav activeView="tags" />
 
@@ -194,7 +199,12 @@ function getTagWeight(count: number) {
             })}
           </section>
         ) : (
-          <p class="empty-note">{ui.groups.emptyTags}</p>
+          <p class="empty-note">
+            <>
+              <span data-locale-copy="en">{ui.groups.emptyTags}</span>
+              <span data-locale-copy="zh-CN">{zhUi.groups.emptyTags}</span>
+            </>
+          </p>
         )
       }
     </main>

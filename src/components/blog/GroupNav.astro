@@ -7,7 +7,7 @@ import {
   getAllTags,
   uncategorizedCategory,
 } from '../../utils/content-groups';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 import Icon from '../Icon.astro';
 import '@navfolio/theme-default/styles/blog-group-nav.css';
 
@@ -24,6 +24,7 @@ const seriesCount = getAllSeries(posts).length;
 const tagCount = getAllTags(posts).length;
 const yearsCount = new Set(posts.map((post) => post.data.date.getFullYear())).size;
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 
 function withBase(href: string) {
   return `${basePath}${href}`;
@@ -41,7 +42,11 @@ function getCategoryName(name: string, slug: string) {
         class:list={['topic-chip', activeView === 'posts' && !activeCategory && 'is-active']}
         href={withBase('/blog/')}
       >
-        <span>{ui.groups.allArticles}</span>
+        <span
+          ><span data-locale-copy="en">{ui.groups.allArticles}</span><span data-locale-copy="zh-CN"
+            >{zhUi.groups.allArticles}</span
+          ></span
+        >
         <b>{posts.length}</b>
       </a>
       {
@@ -70,7 +75,12 @@ function getCategoryName(name: string, slug: string) {
           data-collapse-label={ui.groups.collapse}
           aria-expanded="false"
         >
-          <span data-topic-toggle-label>{ui.groups.expand}</span>
+          <span data-topic-toggle-label>
+            <>
+              <span data-locale-copy="en">{ui.groups.expand}</span>
+              <span data-locale-copy="zh-CN">{zhUi.groups.expand}</span>
+            </>
+          </span>
           <Icon name="chevron-down" size={15} class="topic-toggle-icon" />
         </button>
       )
@@ -80,17 +90,23 @@ function getCategoryName(name: string, slug: string) {
   <div class="group-links" aria-label="Blog views">
     <a class:list={[activeView === 'series' && 'is-active']} href={withBase('/blog/series/')}>
       <Icon name="layers" size={15} />
-      {ui.groups.series}
+      <span data-locale-copy="en">{ui.groups.series}</span><span data-locale-copy="zh-CN"
+        >{zhUi.groups.series}</span
+      >
     </a>
     <span aria-hidden="true">·</span>
     <a class:list={[activeView === 'tags' && 'is-active']} href={withBase('/blog/tags/')}>
       <Icon name="tags" size={15} />
-      {ui.groups.tags}
+      <span data-locale-copy="en">{ui.groups.tags}</span><span data-locale-copy="zh-CN"
+        >{zhUi.groups.tags}</span
+      >
     </a>
     <span aria-hidden="true">·</span>
     <a class:list={[activeView === 'archives' && 'is-active']} href={withBase('/blog/archives/')}>
       <Icon name="calendar" size={15} />
-      {ui.groups.years}
+      <span data-locale-copy="en">{ui.groups.years}</span><span data-locale-copy="zh-CN"
+        >{zhUi.groups.years}</span
+      >
     </a>
   </div>
 

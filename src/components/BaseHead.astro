@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import ThemeBaseHead from '@navfolio/theme-default/components/BaseHead.astro';
 import FallbackImage from '../assets/figure/fail-loading-image.png';
 import { getSiteConfig } from '../data/site';
+import { defaultLocale, localeStorageKey, supportedLocales } from '../i18n/site-copy';
 import '../styles/global.css';
 
 interface Props {
@@ -23,3 +24,68 @@ const { site, fonts } = await getSiteConfig();
   site={site}
   fonts={fonts}
 />
+
+<script is:inline define:vars={{ defaultLocale, localeStorageKey, supportedLocales }}>
+  (() => {
+    const root = document.documentElement;
+    const supported = new Set(supportedLocales);
+
+    const readLocale = () => {
+      const requested = new URLSearchParams(location.search).get('lang');
+      if (requested && supported.has(requested)) return requested;
+
+      try {
+        const saved = localStorage.getItem(localeStorageKey);
+        if (saved && supported.has(saved)) return saved;
+      } catch {}
+
+      return defaultLocale;
+    };
+
+    const updateUrl = (locale) => {
+      const url = new URL(location.href);
+      if (locale === defaultLocale) url.searchParams.delete('lang');
+      else url.searchParams.set('lang', locale);
+      history.replaceState(history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    const applyLocale = (locale, persist = false) => {
+      const nextLocale = supported.has(locale) ? locale : defaultLocale;
+      root.dataset.locale = nextLocale;
+      root.lang = nextLocale;
+
+      if (persist) {
+        try {
+          localStorage.setItem(localeStorageKey, nextLocale);
+        } catch {}
+        updateUrl(nextLocale);
+      }
+
+      for (const button of document.querySelectorAll('[data-locale-toggle]')) {
+        const isEnglish = nextLocale === 'en';
+        button.textContent = isEnglish ? '中文' : 'EN';
+        button.setAttribute('aria-label', isEnglish ? '切换到中文' : 'Switch to English');
+        button.setAttribute('title', isEnglish ? '切换到中文' : 'Switch to English');
+      }
+
+      document.dispatchEvent(new CustomEvent('navfolio:locale-change', { detail: nextLocale }));
+    };
+
+    window.__navfolioApplyLocale = applyLocale;
+    applyLocale(readLocale());
+
+    const mountLocaleControls = () => {
+      applyLocale(root.dataset.locale || readLocale());
+      for (const button of document.querySelectorAll('[data-locale-toggle]')) {
+        if (button.dataset.localeReady) continue;
+        button.dataset.localeReady = 'true';
+        button.addEventListener('click', () => {
+          applyLocale(root.dataset.locale === 'zh-CN' ? 'en' : 'zh-CN', true);
+        });
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', mountLocaleControls, { once: true });
+    document.addEventListener('astro:page-load', mountLocaleControls);
+  })();
+</script>

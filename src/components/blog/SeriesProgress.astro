@@ -1,7 +1,7 @@
 ---
 import ThemeSeriesProgress from '@navfolio/theme-default/components/SeriesProgress.astro';
 import { getSiteConfig } from '../../data/site';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 interface Props {
   current: number;
@@ -12,10 +12,20 @@ const { current, total } = Astro.props;
 const safeTotal = Math.max(1, total);
 const percent = Math.round((current / safeTotal) * 100);
 const ui = getUiText(await getSiteConfig());
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
-<ThemeSeriesProgress
-  label={ui.groups.publishedArticles(current)}
-  copy={ui.groups.publishedCount(current)}
-  percent={percent}
-/>
+<div data-locale-copy="en">
+  <ThemeSeriesProgress
+    label={ui.groups.publishedArticles(current)}
+    copy={ui.groups.publishedCount(current)}
+    percent={percent}
+  />
+</div>
+<div data-locale-copy="zh-CN">
+  <ThemeSeriesProgress
+    label={zhUi.groups.publishedArticles(current)}
+    copy={zhUi.groups.publishedCount(current)}
+    percent={percent}
+  />
+</div>

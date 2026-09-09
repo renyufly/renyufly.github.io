@@ -27,7 +27,12 @@ const { profile } = Astro.props as { profile: Profile };
   <div class="profile-heading">
     <h1>{profile.name}</h1>
     <p>{profile.handle}</p>
-    <span><Icon name="sparkle" /> {profile.role}</span>
+    <span
+      ><Icon name="sparkle" />
+      <span data-locale-copy="en">{profile.role}</span><span data-locale-copy="zh-CN"
+        >软件开发者 · 学生</span
+      ></span
+    >
   </div>
 </article>
 

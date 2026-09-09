@@ -4,6 +4,8 @@ import SiteSearch from './SiteSearch.astro';
 import TocTree from './TocTree.astro';
 import { getRouteLabels, getSiteConfig, getTopNavLinks } from '../../data/site';
 import { getUiText } from '../../utils/ui-text';
+import { getUiTextForLanguage } from '../../utils/ui-text';
+import { siteCopy } from '../../i18n/site-copy';
 import type { TocItem } from '../../utils/toc-tree';
 
 interface Props {
@@ -15,6 +17,7 @@ const { showTocIcon = false, tocItems = [] } = Astro.props;
 const siteConfig = await getSiteConfig();
 const { site, search } = siteConfig;
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 const links = await getTopNavLinks();
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPathname =
@@ -52,6 +55,9 @@ const activeRoute = Object.entries(routeLabels).find(
   ([route]) => currentPath === route || currentPath.startsWith(`${route}/`),
 );
 const brandRouteLabel = activeRoute?.[1];
+const currentRouteHref = activeRoute?.[0] ?? '/';
+const localizedNavLabel = (href: string) =>
+  siteCopy['zh-CN'].nav[href as keyof (typeof siteCopy)['zh-CN']['nav']] ?? href;
 const shouldShowTocAction = showTocIcon && tocItems.length > 0;
 ---
 
@@ -60,6 +66,8 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
   data-pagefind-ignore
   data-toc-open-label={ui.toc.open}
   data-toc-close-label={ui.toc.close}
+  data-toc-open-label-zh={zhUi.toc.open}
+  data-toc-close-label-zh={zhUi.toc.close}
 >
   <button
     class="mobile-menu-toggle"
@@ -76,7 +84,21 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     <span class="brand-mark" aria-hidden="true"></span>
     <span class="brand-title">
       <span>{site.title}</span>
-      {brandRouteLabel && <span class="brand-route"> · {brandRouteLabel}</span>}
+      {
+        brandRouteLabel && (
+          <span class="brand-route">
+            {' '}
+            ·{' '}
+            <>
+              <span data-locale-copy="en">
+                {siteCopy.en.nav[currentRouteHref as keyof typeof siteCopy.en.nav] ??
+                  brandRouteLabel}
+              </span>
+              <span data-locale-copy="zh-CN">{localizedNavLabel(currentRouteHref)}</span>
+            </>
+          </span>
+        )
+      }
     </span>
   </a>
 
@@ -89,11 +111,17 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
             aria-disabled="true"
             title="Projects content placeholder"
           >
-            {link.label}
+            <>
+              <span data-locale-copy="en">{link.label}</span>
+              <span data-locale-copy="zh-CN">{localizedNavLabel(link.href)}</span>
+            </>
           </span>
         ) : (
           <a class:list={['nav-link', { active: isActive(link.href) }]} href={withBase(link.href)}>
-            {link.label}
+            <>
+              <span data-locale-copy="en">{link.label}</span>
+              <span data-locale-copy="zh-CN">{localizedNavLabel(link.href)}</span>
+            </>
           </a>
         ),
       )
@@ -110,7 +138,10 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
       links.map((link) =>
         link.disabled ? (
           <span class="mobile-menu-link mobile-menu-placeholder" aria-disabled="true">
-            {link.label}
+            <>
+              <span data-locale-copy="en">{link.label}</span>
+              <span data-locale-copy="zh-CN">{localizedNavLabel(link.href)}</span>
+            </>
           </span>
         ) : (
           <a
@@ -118,7 +149,10 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
             href={withBase(link.href)}
             data-mobile-menu-link
           >
-            {link.label}
+            <>
+              <span data-locale-copy="en">{link.label}</span>
+              <span data-locale-copy="zh-CN">{localizedNavLabel(link.href)}</span>
+            </>
           </a>
         ),
       )
@@ -139,6 +173,13 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
       <Moon class="theme-icon-moon" size={17} stroke-width={2} />
       <Sun class="theme-icon-sun" size={17} stroke-width={2} />
     </button>
+    <button
+      class="locale-toggle"
+      type="button"
+      data-locale-toggle
+      aria-label="切换到中文"
+      title="切换到中文">中文</button
+    >
     {search.enabled && <SiteSearch search={search} />}
     {
       shouldShowTocAction && (
@@ -167,7 +208,12 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
         data-toc-root
         data-toc-scroll
       >
-        <p>{ui.toc.title}</p>
+        <p>
+          <>
+            <span data-locale-copy="en">{ui.toc.title}</span>
+            <span data-locale-copy="zh-CN">{zhUi.toc.title}</span>
+          </>
+        </p>
         <TocTree items={tocItems} idPrefix="nav-toc" navLink />
       </nav>
     )
@@ -302,8 +348,13 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
             return;
           }
 
-          const tocOpenLabel = header.dataset.tocOpenLabel ?? 'Open table of contents';
-          const tocCloseLabel = header.dataset.tocCloseLabel ?? 'Close table of contents';
+          const isZh = document.documentElement.dataset.locale === 'zh-CN';
+          const tocOpenLabel =
+            (isZh ? header.dataset.tocOpenLabelZh : header.dataset.tocOpenLabel) ??
+            'Open table of contents';
+          const tocCloseLabel =
+            (isZh ? header.dataset.tocCloseLabelZh : header.dataset.tocCloseLabel) ??
+            'Close table of contents';
 
           header.dataset.mobileTocOpen = open ? 'true' : 'false';
           tocTrigger.setAttribute('aria-expanded', String(open));
@@ -545,6 +596,15 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     cursor: pointer;
   }
 
+  .nav-actions .locale-toggle {
+    width: auto;
+    min-width: 38px;
+    padding: 0 8px;
+    font-family: var(--font-ui-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
   .mobile-menu-toggle,
   .nav-actions .toc-action {
     display: none;
@@ -606,6 +666,12 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
       width: 36px;
       height: 36px;
       border-radius: 7px;
+    }
+
+    .nav-actions .locale-toggle {
+      width: auto;
+      min-width: 36px;
+      padding: 0 6px;
     }
 
     .nav-actions .toc-action {

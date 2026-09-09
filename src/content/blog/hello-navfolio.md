@@ -2,6 +2,7 @@
 title: 个人网站启用 Navfolio
 description: 记录本站的初始搭建与内容规划。
 date: 2026-09-09
+language: zh-CN
 tags:
   - Astro
   - Navfolio

@@ -8,7 +8,7 @@ import BlogTopNav from '../../components/blog/BlogTopNav.astro';
 import { getSiteConfig } from '../../data/site';
 import { sortBlogPostsForArchive } from '../../utils/content-dates';
 import { getAllTags } from '../../utils/content-groups';
-import { getUiText } from '../../utils/ui-text';
+import { getUiText, getUiTextForLanguage } from '../../utils/ui-text';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -41,6 +41,7 @@ const palette = theme.palette;
 const pageMeta = pages.blog;
 const { tag, page } = Astro.props;
 const ui = getUiText(siteConfig);
+const zhUi = getUiTextForLanguage('zh-CN');
 ---
 
 <!doctype html>
@@ -64,12 +65,19 @@ const ui = getUiText(siteConfig);
   <body>
     <BlogTopNav />
     <main data-pagefind-body>
-      <BackLink href="/blog/" label={ui.groups.back} />
+      <span data-locale-copy="en"><BackLink href="/blog/" label={ui.groups.back} /></span><span
+        data-locale-copy="zh-CN"><BackLink href="/blog/" label={zhUi.groups.back} /></span
+      >
       <BlogArchive
         page={page}
         headerKicker={ui.groups.tag}
         headerTitle={tag.name}
         headerNote={ui.groups.tagNote(tag.count)}
+        headerZh={{
+          kicker: zhUi.groups.tag,
+          title: tag.name,
+          note: zhUi.groups.tagNote(tag.count),
+        }}
         coverImageStyle={pageMeta.coverImageStyle}
       />
     </main>
