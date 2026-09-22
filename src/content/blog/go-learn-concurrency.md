@@ -293,7 +293,6 @@ func main() {
 
 ```go
 type Job struct {
-    // id
     Id int
     // 需要计算的随机数
     RandNum int
@@ -307,26 +306,27 @@ type Result struct {
 }
 
 func main() {
-    // 需要2个管道
-    // 1.job管道
+    // 需要2个channel
+    // 1.job，容量为 128
     jobChan := make(chan *Job, 128)
-    // 2.结果管道
+    // 2.结果
     resultChan := make(chan *Result, 128)
-    // 3.创建工作池
+    // 3.创建工作池：创建 64 个 worker goroutine
     createPool(64, jobChan, resultChan)
-    // 4.开个打印的协程
+    // 4.开个打印的routine
     go func(resultChan chan *Result) {
-        // 遍历结果管道打印
         for result := range resultChan {
+            // resultChan → Result → 打印
+            // 是 Result 的消费者
             fmt.Printf("job id:%v randnum:%v result:%d\n", result.job.Id,
                 result.job.RandNum, result.sum)
         }
     }(resultChan)
+    
     var id int
-    // 循环创建job，输入到管道
+    // Job 的生产者 Producer，循环创建job，输入到channel
     for {
         id++
-        // 生成随机数
         r_num := rand.Int()
         job := &Job{
             Id:      id,
@@ -343,9 +343,8 @@ func createPool(num int, jobChan chan *Job, resultChan chan *Result) {
     for i := 0; i < num; i++ {
         go func(jobChan chan *Job, resultChan chan *Result) {
             // 执行运算
-            // 遍历job管道所有数据，进行相加
+            // 不断从 jobChan 里面拿 Job
             for job := range jobChan {
-                // 随机数接过来
                 r_num := job.RandNum
                 // 随机数每一位相加
                 // 定义返回值
@@ -355,13 +354,12 @@ func createPool(num int, jobChan chan *Job, resultChan chan *Result) {
                     sum += tmp
                     r_num /= 10
                 }
-                // 想要的结果是Result
+                // 创建 Result
                 r := &Result{
                     job: job,
                     sum: sum,
                 }
-                //运算结果扔到管道
-                resultChan <- r
+                resultChan <- r  // worker 发送到→ channel
             }
         }(jobChan, resultChan)
     }
@@ -370,13 +368,292 @@ func createPool(num int, jobChan chan *Job, resultChan chan *Result) {
 
 
 
+## 定时器
+
+- Timer：时间到了，执行只执行1次
+
+```go
+func main() {
+    // 1.timer基本使用
+    //timer1 := time.NewTimer(2 * time.Second)
+    //t1 := time.Now()
+    //fmt.Printf("t1:%v\n", t1)
+    //t2 := <-timer1.C
+    //fmt.Printf("t2:%v\n", t2)
+
+    // 2.验证timer只能响应1次
+    //timer2 := time.NewTimer(time.Second)
+    //for {
+    // <-timer2.C
+    // fmt.Println("时间到")
+    //}
+
+    // 3.timer实现延时的功能
+    //(1)
+    //time.Sleep(time.Second)
+    //(2)
+    //timer3 := time.NewTimer(2 * time.Second)
+    //<-timer3.C
+    //fmt.Println("2秒到")
+    //(3)
+    //<-time.After(2*time.Second)
+    //fmt.Println("2秒到")
+
+    // 4.停止定时器
+    //timer4 := time.NewTimer(2 * time.Second)
+    //go func() {
+    // <-timer4.C
+    // fmt.Println("定时器执行了")
+    //}()
+    //b := timer4.Stop()
+    //if b {
+    // fmt.Println("timer4已经关闭")
+    //}
+
+    // 5.重置定时器
+    timer5 := time.NewTimer(3 * time.Second)
+    timer5.Reset(1 * time.Second)
+    fmt.Println(time.Now())
+    fmt.Println(<-timer5.C)
+
+    for {
+    }
+}
+```
+
+- Ticker：时间到了，多次执行
+
+```go
+func main() {
+    // 1.获取ticker对象
+    ticker := time.NewTicker(1 * time.Second)
+    i := 0
+    // 子协程
+    go func() {
+        for {
+            //<-ticker.C
+            i++
+            fmt.Println(<-ticker.C)
+            if i == 5 {
+                //停止
+                ticker.Stop()
+            }
+        }
+    }()
+    for {
+    }
+}
+```
 
 
 
+## select
+
+某些场景下我们需要同时从多个通道接收数据。通道在接收数据时，如果没有数据可以接收将会发生阻塞。
+
+Go内置了select关键字，可以同时响应多个通道的操作。
+
+select的使用类似于switch语句，它有一系列case分支和一个默认的分支。每个case会对应一个通道的通信（接收或发送）过程。select会一直等待，直到某个case的通信操作完成时，就会执行case分支对应的语句。
+
+```go
+ select {
+     case <-chan1:
+     // 如果chan1成功读到数据，则进行该case处理语句
+     case chan2 <- 1:
+     // 如果成功向chan2写入数据，则进行该case处理语句
+     default:
+     // 如果上面都没有成功，则进入default处理流程
+ }
+```
+
+- select可以同时监听一个或多个channel，直到其中一个channel ready
+
+- 如果多个channel同时ready，则随机选择一个执行
+
+```go
+func test1(ch chan string) {
+   time.Sleep(time.Second * 5)
+   ch <- "test1"   // 发送
+}
+func test2(ch chan string) {
+   time.Sleep(time.Second * 2)
+   ch <- "test2"
+}
+
+func main() {
+   // 2个管道
+   output1 := make(chan string)
+   output2 := make(chan string)
+   // 跑2个子协程，写数据
+   go test1(output1)
+   go test2(output2)
+   // 用select监控
+   select {
+   case s1 := <-output1:
+      fmt.Println("s1=", s1)
+   case s2 := <-output2:
+      fmt.Println("s2=", s2)
+   }
+}
+```
 
 
 
+## 并发安全和锁
 
+在Go代码中可能会存在多个goroutine同时操作一个资源（临界区），这种情况会发生竞态问题（数据竞态 data race）。
+
+互斥锁是一种常用的控制共享资源访问的方法，它能够保证**同时只有一个goroutine可以访问共享资源**。Go语言中使用sync包的Mutex类型来实现互斥锁。
+
+```go
+var x int64
+var wg sync.WaitGroup
+var lock sync.Mutex  // Mutex
+
+func add() {
+    for i := 0; i < 5000; i++ {
+        lock.Lock() // 加锁
+        x = x + 1
+        lock.Unlock() // 解锁
+    }
+    wg.Done()
+}
+func main() {
+    wg.Add(2)
+    go add()  //
+    go add()  // 
+    wg.Wait()
+    fmt.Println(x)
+}
+```
+
+使用互斥锁能够保证同一时间有且只有一个goroutine进入临界区，其他的goroutine则在等待锁；当互斥锁释放后，等待的goroutine才可以获取锁进入临界区，多个goroutine同时等待一个锁时，唤醒的策略是随机的。
+
+互斥锁是完全互斥的。
+
+很多实际的场景下是**读多写少**的，当我们**并发的去读取**一个资源**不涉及资源修改**的时候是**没有必要加锁**的，这种场景下使用读写锁是更好的一种选择。读写锁在Go语言中使用sync包中的RWMutex类型。
+
+读写锁分为两种：读锁和写锁。
+
+- 当**一个goroutine获取读锁**之后，其他的goroutine**如果是获取读锁会继续获得锁**，如果是获取**写锁就会等待**；
+- 当**一个goroutine获取写锁**之后，**其他**的goroutine无论是获取读锁还是写锁**都会等待**。
+
+```go
+var (
+    x      int64
+    wg     sync.WaitGroup
+    lock   sync.Mutex
+    rwlock sync.RWMutex
+)
+func write() {
+    // lock.Lock()   // 加互斥锁
+    rwlock.Lock() // 加写锁
+    x = x + 1
+    time.Sleep(10 * time.Millisecond) // 假设读操作耗时10毫秒
+    rwlock.Unlock()                   // 解写锁
+    // lock.Unlock()                     // 解互斥锁
+    wg.Done()
+}
+func read() {
+    // lock.Lock()                  // 加互斥锁
+    rwlock.RLock()               // 加读锁
+    time.Sleep(time.Millisecond) // 假设读操作耗时1毫秒
+    rwlock.RUnlock()             // 解读锁
+    // lock.Unlock()                // 解互斥锁
+    wg.Done()
+}
+
+func main() {
+    start := time.Now()
+    for i := 0; i < 10; i++ {
+        wg.Add(1)
+        go write()
+    }
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go read()
+    }
+    wg.Wait()
+    end := time.Now()
+    fmt.Println(end.Sub(start))
+}
+```
+
+
+
+## Sync
+
+Go语言中可以使用sync.WaitGroup来实现并发任务的同步。
+
+sync.WaitGroup内部维护着一个计数器，计数器的值可以增加和减少。例如当我们启动了N 个并发任务时，就将计数器值增加N。每个任务完成时通过调用Done()方法将计数器减1。通过**调用Wait()来等待并发任务执行完**，当**计数器值为0时，表示所有并发任务已经完成**。
+
+```go
+var wg sync.WaitGroup
+
+func hello() {
+    defer wg.Done()
+    fmt.Println("Hello Goroutine!")
+}
+func main() {
+    wg.Add(1)
+    go hello() // 启动另外一个goroutine去执行hello函数
+    fmt.Println("main goroutine done!")
+    wg.Wait()
+}
+```
+
+注意sync.WaitGroup是一个结构体，传递的时候要传递指针。
+
+
+
+## 原子操作-atomic包
+
+代码中的加锁操作因为涉及内核态的上下文切换会比较耗时、代价比较高。
+
+针对基本数据类型我们还可以使用原子操作来保证并发安全，因为原子操作是Go语言提供的方法，它在用户态就可以完成。
+
+Go语言中原子操作由内置的标准库sync/atomic提供。
+
+```go
+var x int64
+var l sync.Mutex
+var wg sync.WaitGroup
+
+// 普通版加函数
+func add() {
+    // x = x + 1
+    x++ // 等价于上面的操作
+    wg.Done()
+}
+
+// 互斥锁版加函数
+func mutexAdd() {
+    l.Lock()
+    x++
+    l.Unlock()
+    wg.Done()
+}
+
+// 原子操作版加函数
+func atomicAdd() {
+    atomic.AddInt64(&x, 1)
+    wg.Done()
+}
+
+func main() {
+    start := time.Now()
+    for i := 0; i < 10000; i++ {
+        wg.Add(1)
+        // go add()       // 普通版add函数 不是并发安全的
+        // go mutexAdd()  // 加锁版add函数 是并发安全的，但是加锁性能开销大
+        go atomicAdd() // 原子操作版add函数 是并发安全，性能优于加锁版
+    }
+    wg.Wait()
+    end := time.Now()
+    fmt.Println(x)
+    fmt.Println(end.Sub(start))
+}
+```
 
 
 
@@ -476,3 +753,49 @@ Golang 的并发模型基于 **CSP（Communicating Sequential Processes）** 理
 - **不适用于共享内存密集的场景**：在需要频繁访问和修改共享内存的场景中，CSP 模型可能不是最佳选择。
 - **理解曲线**：尽管 Go 语言的 CSP 模型使并发编程变得更简单，但对于初学者来说，理解 Channel 的阻塞、缓冲等机制仍有一定的学习曲线。
 
+
+
+## 生产者-消费者模型
+
+生产者负责产生数据，消费者负责处理数据，channel 负责在两者之间传递数据。
+
+```go
+func producer(ch chan int) {
+    for i := 1; i <= 5; i++ {
+        ch <- i
+    }
+    close(ch)  // 一般是 发送方负责关闭 channel
+}
+
+func consumer(ch chan int) {
+    for value := range ch {
+        fmt.Println("消费：", value)
+    }
+}
+
+func main() {
+    ch := make(chan int)
+
+    go producer(ch)
+    go consumer(ch)
+}
+```
+
+生产者负责发现任务：
+
+```
+jobs <- file
+```
+
+消费者负责真正处理：
+
+```
+file := <-jobs
+process(file)
+```
+
+这样消费者数量还可以控制**最大并发量**。
+
+
+
+背压（backpressure）：消费者处理不过来时，生产者会自然慢下来。
