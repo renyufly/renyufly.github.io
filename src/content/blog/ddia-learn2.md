@@ -1,7 +1,8 @@
 ---
 title: "<DDIA>6-10章-系统设计书学习"
 description: ''
-date: "2026-10-14"
+date: "2026-10-12"
+updatedDate: "2026-10-12"
 language: zh-CN
 tags:
   - system design

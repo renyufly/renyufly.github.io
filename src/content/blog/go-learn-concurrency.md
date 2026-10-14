@@ -2,6 +2,7 @@
 title: "Go语言-并发"
 description: ''
 date: "2026-09-22"
+updatedDate: "2026-09-22"
 language: zh-CN
 tags:
   - Golang

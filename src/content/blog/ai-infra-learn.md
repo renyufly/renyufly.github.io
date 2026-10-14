@@ -1,22 +1,19 @@
 ---
 title: "ai-infra-learn"
 description: ''
-date: "2026-09-28T20:28:19.505Z"
-draft: true
-sticky: false
-heroImage: ''
-showHeroImage: false
-tags: []
-categories: []
-series: []
-comments: true
-sidebar:
-  enable: true
-  toc: true
-  relatedPosts: true
+date: "2026-09-28"
+updatedDate: "2026-09-28"
+language: zh-CN
+tags:
+  - ai infra
+  - GPU
+  - 并行计算
+categories:
+  - ai infra
+comments: false
 ---
 
-# ai-infra-learn
+# AI Infra 入门学习
 
 kernel (算子)：GPU上运行的函数。  通常借助GPU的大量SM (Streaming Multiprocessor) 并行单元来运行。
 

@@ -16,6 +16,7 @@ interface Props {
   description?: string;
   descriptionZh?: string;
   date?: Date;
+  updatedDate?: Date;
   wordCount: number;
   readingTime: string;
   readingTimeZh?: string;
@@ -39,6 +40,7 @@ const {
   description,
   descriptionZh,
   date,
+  updatedDate,
   wordCount,
   readingTime,
   readingTimeZh = readingTime,
@@ -96,6 +98,17 @@ const wordCountLabelZh = zhUi.article.wordCount(wordCount);
             {date && (
               <MetadataItem kind="date" separated={false}>
                 <FormattedDate date={date} />
+              </MetadataItem>
+            )}
+            {updatedDate && (
+              <MetadataItem kind="updated">
+                <span class="sr-only" data-locale-copy="en">
+                  Updated{' '}
+                </span>
+                <span class="sr-only" data-locale-copy="zh-CN">
+                  更新于{' '}
+                </span>
+                <FormattedDate date={updatedDate} />
               </MetadataItem>
             )}
             <MetadataItem kind="words" separated={Boolean(date)}>
@@ -189,6 +202,17 @@ const wordCountLabelZh = zhUi.article.wordCount(wordCount);
           {date && (
             <MetadataItem kind="date" separated={false}>
               <FormattedDate date={date} />
+            </MetadataItem>
+          )}
+          {updatedDate && (
+            <MetadataItem kind="updated">
+              <span class="sr-only" data-locale-copy="en">
+                Updated{' '}
+              </span>
+              <span class="sr-only" data-locale-copy="zh-CN">
+                更新于{' '}
+              </span>
+              <FormattedDate date={updatedDate} />
             </MetadataItem>
           )}
           <MetadataItem kind="words" separated={Boolean(date)}>
