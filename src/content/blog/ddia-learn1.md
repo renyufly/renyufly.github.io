@@ -2,7 +2,7 @@
 title: "<DDIA>1-5章-系统设计书学习"
 description: ''
 date: "2026-10-10"
-updatedDate: "2026-10-14"
+updatedDate: "2026-10-16"
 language: zh-CN
 tags:
   - system design
@@ -1104,10 +1104,151 @@ Storage & Retrieval(检索)：数据库如何存储我们提供的数据，以�
 
 这样便不必在内存中保留所有 key，可以把 SSTable 中的键值对 group 分成若干个 几千字节大小的 *块*（*block*），索引只存储每个 block 的第一个 key 。
 
+```
++--------------------------------+ SSTable (Sorted + Immutable)
+| Data (sorted by Key)           |
+|  apple   -> 100                |
+|  banana  -> 200                |
+|  cherry  -> 300                |
+|  dog     -> 400                |
++--------------------------------+
+| sparse index                   |
+|  apple -> offset 0             |
+|  cherry -> offset 2            |
++--------------------------------+
+| Bloom Filter | Footer          |
++--------------------------------+
+MemTable --Flush--> SSTable
+SSTable + SSTable --Compact--> SSTable
+```
+
 *稀疏索引*（*sparse index*）：只收录部分 key 的索引。
 
 索引保存在 SSTable 的一个独立区域中，可以采用不可变 B 树(immutable B-tree)、字典树(trie) 或其他能快速查找特定键的数据结构。
 
 此外，每个记录块都可以压缩(compressed)，除了节省磁盘空间，压缩还能减少 I/O 带宽的使用(bandwidth use)，代价只是多耗费一点 CPU 时间。
 
+### LSM 存储
+
 **构建和合并 SSTable**
+
+SSTable 文件格式比仅追加日志更利于读取，却让写入变得困难。不能直接向文件末尾追加，否则文件就不再有序.
+
+解决办法是采用 *日志结构 (log-structured)* 方法，将仅追加日志(append-only log) 与排序文件结合起来：
+
+1. **写入（Write）**：当写入请求到来时，将数据添加到内存中的 ordered map 数据结构，例如红黑树(red–black tree,)、跳表(skip list) 或字典树(trie)。
+
+   >  *内存表（memtable）*：这类内存中的 ordered map 数据结构；支持任意顺序插入、高效查找和按序读取。
+
+2. **刷盘（Flush）**：当内存表超过某个阈值(threshold)（通常为几MB）时，就将其按 Key 排序写入磁盘，形成一个 SSTable file。它作为最新的 *数据段（Segment）*，与旧数据段分别存储，每段都有独立索引。刷盘期间，新写入可以继续进入新的 MemTable；Flush 完成后释放旧 MemTable 的内存。
+
+3. **读取（Read）**：查找 Key 时，先检查 MemTable，再检查磁盘上最新的 Segment。如果没有找到，就依次检查更旧的 Segment，直到找到或检查完毕。如果所有数据段都没有该 Key，则该 Key 不存在。
+
+4. **合并与压实（Merging and Compaction）**：后台定期合并多个 Segment 文件，清理被覆盖的旧值和不再需要的已删除数据。
+
+```
+WRITE --> MemTable --> Flush --> SSTable(new) --> SSTable(old)
+             ^                         |
+             |                       Read
+             +-- New writes            |
+                                       v
+                              Merge + Compaction
+                                       |
+                                       v
+                               Merged SSTable
+```
+
+合并数据段（Segments）的过程类似于 *归并排序(mergesort)* 算法：
+
+1. 并行读取多个输入文件，比较每个文件当前的第一个 Key。
+2. 选择最小 Key（按照排序顺序），将其复制到输出文件，并重复此过程。
+3. 处理重复 Key：如果同一个 Key 出现在多个输入文件中，只保留最新的值。
+
+最终生成一个新的、按 Key 排序的合并数据段（Segment），其中每个 Key 只有一个值。由于可以逐个 Key 遍历 SSTable，整个合并过程只需要极少的内存。
+
+为确保数据库崩溃时 MemTable 中的数据不会丢失，存储引擎会在磁盘上维护一个独立的日志文件。每次写入操作都会立即**追加（Append）**到该日志中。该日志不需要按 Key 排序，因为它的唯一目的是在数据库崩溃后恢复 MemTable。每当 MemTable 被写入磁盘并生成 SSTable 后，对应的日志部分就可以被丢弃。
+
+如果想删除某个 Key 及其对应的 Value，需要向数据文件追加一条特殊的删除记录，称为 *Tombstone（墓碑标记）*。当日志段（Log Segments）合并时，Tombstone 会告诉合并过程：丢弃该 Key 之前的所有值。一旦 Tombstone 被合并到最旧的数据段，它本身也可以被删除。
+
+> 这里描述的算法基本上就是 RocksDB、Cassandra、ScyllaDB 和 HBase 所使用的算法。这些系统都受到了 Google Bigtable 论文的启发，该论文引入了 SSTable 和 MemTable 这两个术语。
+
+这一算法最初发表于 1996 年，名为 *日志结构合并树*（*Log-Structured Merge-Tree*，简称 *LSM 树*），它建立在更早的日志结构文件系统研究之上。因此，凡是**以合并、压实有序文件为基本原理**的存储引擎，通常都称为 *LSM 存储引擎 (storage engine)*。
+
+在 LSM 存储引擎中，segment文件会一次(in one pass) 写完（或者由Memtable写出，或者由若干现有segment合并而成），此后便不可变。段的合并与压实可以由后台线程完成；在此期间，旧segment文件仍可继续处理读取请求。合并完成后，读取请求切换到新的合并段，旧segment文件即可删除。
+
+段文件不一定要保存在本地磁盘上；它们也非常适合写入对象存储(object storage)。例如，SlateDB 和 Delta Lake 。
+
+不可变的segment文件，也让崩溃恢复变得更简单：如果在写出Memtable或合并segment时发生崩溃，数据库只需删除未完成的 SSTable，再重新开始即可。用于持久化内存表写入的日志，可能因写到一半时崩溃或磁盘已满而留下不完整记录；通常可以借助日志中的校验(checksum)和检测这些记录，并丢弃损坏或不完整的条目。
+
+### 布隆过滤(bloom filter)
+
+LSM 存储引擎通常会为每个segment配备一个 *布隆过滤器*（*Bloom filter*）：快速、近似地判断某个key 是否出现在某个 SSTable 中。
+
+- 不存在：100% 确定不存在（无假阴性）。
+- 可能存在：不一定真的存在（有假阳性 false positive）。
+- 空间效率高：使用位数组（Bit Array）和多个哈希函数
+
+构建 Bloom Filter：对于 SSTable 中的每个 Key，使用Hash函数计算出一组数字，将这些数字作为位数组（Bit Array）的索引，对应位置设为 `1`，其余位置保持 `0`。生成的位图(bitmap) 会与稀疏索引（Sparse Index）一起存储在 SSTable 中。虽然占用额外空间，但通常远小于 SSTable 本身。
+
+查询 Bloom Filter：查询 Key 时，使用相同的哈希函数计算索引，并检查对应的 Bit。（CPU 可以执行位运算）
+
+判断结果：至少一个 Bit 为 0 => Key 一定不存在；  所有 Bit 都为 1 => Key 可能存在，但不保证。
+
+> 如果其他 Key 恰好将这些 Bit 全部设为 `1`，就会产生 *False Positive（假阳性）*，即 看似存在、实际却不存在的情况。
+
+假阳性的概率取决于键的数量、每个键设置多少位，以及布隆过滤器的总位数。一般SSTable 中每个键分配 10 bits 布隆过滤器空间，假阳性概率约为 1%。
+
+对 LSM 存储引擎来说，假阳性不会影响查询正确性：
+
+- 如果布隆过滤器判断 key *不存在*，就可以放心跳过这个 SSTable，因为其中一定没有该键。
+- 如果布隆过滤器判断 key *存在*，还要查询稀疏索引、解码键值对块，确认键是否真的在其中。如果遇到假阳性，继续搜索下一个更旧的段即可。
+
+```
+GET(key) --> Hash(key) --> Check Bits
+                  +------------+------------+
+              Any bit=0                 All bits=1
+                  |                         |
+             NOT EXISTS                  MAYBE
+                  |                         |
+             Skip SSTable             Search SSTable -> FOUND / NOT FOUND              
+```
+
+**Compaction(压实) strategies**
+
+LSM 存储的一项重要设计细节，是何时执行压实，以及每次压实应包含哪些 SSTable。常见压实策略：
+
+- *按大小分层压实（size-tiered compaction）*：将较新、较小的 SSTable 逐步合并到较旧、较大的 SSTable 中。
+
+  保存旧数据的 SSTable 可能变得非常大，合并时需要大量临时磁盘空间。这种策略的优点是能应对很高的写入吞吐量；因为绝大多数数据仅在较大规模的顺序合并过程中被重写过几次。
+
+- *分级压实（leveled compaction）*：会保持 SSTable 的大小固定，并将它们 group 成容量逐渐增大的多个层级（称为 L0、L1 等）：L0 层存储最近写入的数据；L0 之后的所有层级都包含按 Key 范围划分(range–partitioned) 的 SSTable。 每个层级都有自己的容量上限，并且后一层的容量大于前一层(preceded)。当某一层的 SSTable 总大小超过容量上限时，该层（第 i 层）的一个或多个 SSTable 会被合并到下一层（第 i+1 层），随后从原层删除。
+
+  所需磁盘空间少于按大小分层策略；分级压实的读取效率更高，因为存储引擎只需检查较少的 SSTable，就能判断其中是否含有所需的键。
+
+一般，如果工作负载以写入为主、读取很少，按大小分层压实通常表现更好；如果读取占主导，分级压实通常更好。若少量键经常写入，而大量键很少写入，分级压实也可能更有优势。
+
+LSM 树的基本思想：保存一系列在后台合并的 SSTable。
+
+> 嵌入式存储引擎 (Embedded Storage Engines)
+>
+> 有一些 嵌入式（embedded）数据库并不提供网络 API。它们是与应用代码运行在同一进程中的库，通常读写本地磁盘上的文件，应用则通过普通函数调用与之交互。RocksDB、SQLite、LMDB、DuckDB 和 KùzuDB 都是嵌入式存储引擎。
+>
+> 嵌入式数据库在移动应用中十分常见，可用于保存本地用户的数据。在后端，如果数据小到单机足以容纳，并发事务又不多，嵌入式数据库也可能是合适的选择。
+
+
+
+### B-Trees - index实现
+
+按key 读写数据库记录时，使用最广泛的结构是 *B 树 (B-tree)*。
+
+时至今日，它仍然是几乎所有关系数据库中的标准 index 实现，许多非关系数据库也使用 B 树。
+
+B 树 按key 保存 有序的 key-value pairs，因而能高效地查找(lookups) 键值和执行范围查询(range queries) 。
+
+B 树把数据库分成大小固定的 *块(blocks)* 或 *页(pages)*，并允许就地(in place) 覆盖页。传统的页大小是 4 KiB. ( PostgreSQL 目前默认使用 8 KiB，MySQL 默认使用 16 KiB )
+
+每一页都有 *页号(page number)* 作为标识，可以引用另一页（类似于指针，只不过位于磁盘而非内存）。如果所有页都保存在同一个文件中，页号乘以页大小，就是该页在文件中的字节offset。可以构造一棵页组成的树:
+
+
+
+其中一页被指定为 B-tree 的 *根*（*root*）；在index中查找key时，总是从这里开始。根页包含若干个key 和 对子页的引用。每个子页(child) 负责一段连续的key，各引用之间的key 标示出相邻range的边界。（这种结构有时称为 B+ 树)
