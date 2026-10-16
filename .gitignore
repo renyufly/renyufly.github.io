@@ -34,4 +34,4 @@ public/fonts/*-subset.woff2
 public/friend-circle.json
 
 # 
-src/content/.tmp.drivedownload
+src/content/.tmp.*
