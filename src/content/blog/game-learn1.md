@@ -6,8 +6,10 @@ updatedDate: "2026-11-15"
 language: zh-CN
 tags:
   - 游戏开发
+  - Unreal Engine
 categories:
   - 游戏开发
+  - Unreal Engine
 comments: false
 ---
 
@@ -110,6 +112,8 @@ Shader（着色器）：本质上是运行在 GPU 上的程序，用来参与计
 
 - [ ] C++ + UE Gameplay
 
+  https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-5-9-documentation
+
   https://tomlooman.com/unreal-engine-cpp-guide
 
   https://tomlooman.com/unreal-engine-cpp-tutorials/
@@ -184,7 +188,7 @@ Shader（着色器）：本质上是运行在 GPU 上的程序，用来参与计
 
 **Level Editor** 是构建游戏关卡的主要编辑器。默认会自动打开。可以添加不同类型的 Actor 和几何体、蓝图、可视化脚本、Niagara 等
 
-**Static Mesh Editor **预览 static mesh (静态网格体) 的外观、碰撞和 UV 贴图(mapping)，以及设置和调整其属性。还可设置 LOD（Level of Detail settings 细节级别设置）。
+**Static Mesh Editor ** 预览 static mesh (静态网格体) 的外观、碰撞和 UV 贴图(mapping)，以及设置和调整其属性。还可设置 LOD（Level of Detail settings 细节级别设置）。
 
 > 表示三维物体几何形状的一种资源。
 >
@@ -277,8 +281,8 @@ UE 使用笛卡尔坐标系(Cartesian coordinate system) 来表示三维 欧几�
 
 坐标系采用**左手坐标系**，**Z 轴向上**。点的位置由其在三个坐标轴（X 轴、Y 轴和 Z 轴）上的位置决定。
 
-- **+X：前方 ** Red    （X-axis: abscissa）
-- **+Y：右方 ** Green   (Y-axis: ordinate)
+- **+X：前方 **  Red    （X-axis: abscissa）
+- **+Y：右方 **  Green   (Y-axis: ordinate)
 - **+Z：上方**  Blue       (Z-axis: applicate)
 
 <img src="https://dev.epicgames.com/community/api/documentation/image/e0210fee-8b01-478b-82ca-1a49556c1778?resizing_type=fit" alt="img" style="zoom:50%;" />
