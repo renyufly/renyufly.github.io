@@ -1,5 +1,5 @@
 ---
-title: "游戏开发-整体概念词语介绍"
+title: "游戏开发-整体概念&UE入门"
 description: ''
 date: "2026-11-14"
 updatedDate: "2026-11-15"
@@ -13,7 +13,7 @@ categories:
 comments: false
 ---
 
-# 游戏开发-整体概念词语介绍
+# 游戏开发-整体概念&UE入门
 
 **整体流程**
 
@@ -341,3 +341,41 @@ Unreal Engine 默认使用以下**国际单位制（SI）计量单位**：
 `GetCharacterMovement()->MaxWalkSpeed = 600.f;`  表示 600 cm/s = 6 m/s。
 
 > 游戏中使用的单位在数值上不一定要符合现实世界。比如FPS 游戏为了操作手感，可以让角色移动速度达到 8 m/s，甚至更快。  游戏里的数值可以不真实，但单位必须保持一致。
+
+## UE Content Browser
+
+UE Editor中用于创建、导入、组织、查看和管理虚幻项目中内容资源的主要区域。
+
+## UE Actor
+
+Actor 是可以放置在关卡中的任何对象，例如摄像机、静态网格体或玩家起始位置。Actor 支持平移、旋转和缩放等 3D 变换。它们可以通过游戏代码（C++ 或蓝图）创建（生成）和销毁。
+
+要创建Level，你需要将 Actor 放置在Level（Map）中，并添加脚本来控制它们的行为。
+
+将 Actor 放置到Level中会创建该 Actor 所基于的对象的一个实例。
+
+
+
+Component 是可以添加到 Actor 中的功能模块。
+
+例如：Spot Light Component 会让你的角色像聚光灯一样发光。
+
+Component 不能独立存在，它们必须附加到 Actor 上。
+
+一辆汽车（Actor）可以作为世界（Level）中的一个对象存在，而无需驾驶员（蓝图或 C++ 代码）来告诉它该做什么。之后，可以使用蓝图或 C++ 代码来单独访问汽车的每个组件（例如，如果踩下了油门踏板组件，蓝图逻辑可以使汽车加速）。
+
+在 Actor 中作为子对象创建的 Components 会被实例化，意味着特定类的每个 Actor 实例都会获得其自身唯一的 Components 实例。
+
+## Playing and Simulating
+
+即时预览游戏，无需先将其构建成独立应用程序：
+
+- Play In Editor (PIE)  ： play 始终会从玩家起始位置开始游戏，并赋予玩家角色控制权
+
+  "Frame skip" (跳帧)：使游戏画面前进 1 帧（如果有动画对象，例如粒子发射器，则可很容易地看到）
+
+  > 打开 PIE 控制台，请在 PIE 模式下玩游戏时按波浪号 (~) 键
+
+- Simulate In Editor (SIE)：simulation 不会移动摄像机，也不会生成玩家角色。
+
+  比如 模拟 具有物理特性的球，查看其落下的碰撞情况。
