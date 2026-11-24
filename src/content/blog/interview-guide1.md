@@ -419,3 +419,400 @@ flowchart TB
 - **尽早海投**：小厂练手，中厂检验，大厂冲刺。
 - **面试复盘**：记录问题、查漏补缺、优化简历与话术。
 - **循环迭代**：持续投递、面试、复盘，直到拿到 Offer。
+
+
+
+## TO DO list
+
+- 后端开发（Go / 通用后端）  45%
+- AI 应用开发 / Agent              25%
+- AI Infra                                   15%
+- 全栈开发                                10%
+- 大模型后训练 / 算法                 5%
+
+> 投递传统后端岗位，也可以投递 AI 应用、Agent 平台、模型服务平台、推理基础设施等岗位。后训练算法岗则作为机会型投递方向。
+>
+> 后端开发实习经历，同时懂得如何将大模型应用工程化、服务化和规模化部署
+
+| 模块清单                   | 目标                              | 优先级 |
+| -------------------------- | --------------------------------- | ------ |
+| LeetCode                   | Hot 100 两轮 + 高频变体 20～30 题 | P0     |
+| Go 八股                    | 语言底层、GMP、GC、并发           | P0     |
+| 计算机基础                 | OS、网络、数据库                  | P0     |
+| 后端中间件                 | Redis、MySQL、MQ                  | P0     |
+| 分布式系统                 | 一致性、限流、幂等、分布式锁      | P0     |
+| 当前实习                   | 整理出 3～5 个可深挖的技术亮点    | P0     |
+| 新增项目                   | 一个高质量 Go + AI Infra 项目     | P0     |
+| 现有 Agent 项目            | 工程化改造、评测、可观测性        | P1     |
+| 新增项目— 完成 LLM Gateway | AI 应用基础设施                   |        |
+| AI 基础                    | Transformer、LLM、RAG、Agent      | P1     |
+| 系统设计                   | 6～8 道典型系统设计题             | P1     |
+| 全栈                       | React、TypeScript、基础前端工程化 | P1     |
+| 后训练项目                 | SFT、LoRA、DPO、GRPO 实践         | P2     |
+| 求职准备                   | 多版本简历、模拟面试、岗位整理    | P0     |
+
+- [ ] 力扣 hot 100 + 补充题：LRU、LFU、排序算法、Top K、并查集、生产者消费者、交替打印、多协程任务调度 + 手撕并发
+
+  > 能够不看答案独立完成，Medium 尽量控制在 20～25 分钟
+
+- [ ] 八股文背诵：
+
+  - [ ] 后端语言底层：如Go的GMP、Channel、GC、Context 和 Mutex；Go 并发（手写生产者消费者 手写多协程交替打印 手写 Worker Pool 与并发任务调度 实现并发数限制, 任务超时与取消）；
+
+    > 其他必备语言基础知识：Python 熟练使用 PyTorch, 编写实验和推理代码； C++ 基础语法, STL, RAII, 智能指针,
+
+  - [ ] 操作系统：进程线程协程、虚拟内存、分页、死锁、系统调用、零拷贝
+
+  - [ ] 计算机网络：TCP 握手挥手、拥塞控制、滑动窗口、HTTP 1.1/2/3、HTTPS、DNS
+
+  - [ ] 数据库基础：索引、事务、锁、隔离级别、MVCC
+
+  - [ ] Linux：epoll、select、poll、IO 模型、常用排查命令
+
+  > 面试经常会从一个基础问题连续追问到源码、实际业务场景和系统设计。
+  >
+  > 例如，从 Redis 分布式锁开始，可以一直问到锁续期、主从切换、业务幂等和一致性问题。
+
+- [ ] MySQL：B+树索引、 联合索引、 事务、 MVCC、 锁机制 、日志 、SQL 优化、 高可用 (主从复制、读写分离、分库分表)
+
+  > 自己构造慢查询、索引使用不佳和事务锁冲突的场景，并尝试分析解决
+
+- [ ] 后端中间件 - Redis：数据结构 、性能 (单线程命令执行、IO 多路复用)、持久化、 缓存问题 (穿透、击穿、雪崩、热点 Key、大 Key)、 内存管理 (过期删除、淘汰策略)、 高可用 (主从复制、Sentinel、Cluster) 、 分布式锁 (SET NX PX、Lua 原子释放、续期、局限性)、 一致性、 业务场景 (排行榜、限流、去重、库存扣减)
+
+- [ ] 消息队列 MQ
+
+  > 选择 Kafka 作为重点学习对象，RabbitMQ 或 RocketMQ 了解其核心区别即可。
+
+- [ ] RPC 与 微服务：服务注册, 服务发现, 健康检查、微服务网关, 服务治理
+
+- [ ] 分布式系统：CAP/BASE 、Raft /—致性、 分布式事务、幂等与重试、限流与熔断、分布式锁 、服务治理、 负载均衡、分布式ID, Snowflake
+
+- [ ] 并发编程 + 设计模式
+
+- [ ] Docker、Git、CI/CD、性能分析（pprof、perf、火焰图、Profiling）、可观测性
+
+- [ ] 每周整理一份实习技术笔记，记录你做过的需求、遇到的技术问题、参与的系统设计，以及自己实际完成的优化：
+
+  - 业务背景：为什么需要开发这个功能？
+  - 技术难点：原有方案存在什么问题？
+  - 方案选型：为什么选择这个方案而不是其他方案？
+  - 具体实现：你个人负责了什么？
+  - 结果与指标：性能、稳定性、效率发生了什么变化？
+  - 反思与改进：如果流量增加十倍，应该怎么改？
+
+- [ ] 系统设计题目：设计一个秒杀系统 、设计一个短链接系统 、设计一个分布式限流器、 设计一个消息通知系统 、设计一个即时聊天系统 、设计一个分布式任务调度系统 、设计—个 LLM Gateway 、设计一个大模型推理平台； 线上 CPU 100% 如何排查 、接口突然变慢如何排查 、如何处理重复请求和重复扣款 、如何解决缓存与数据库不一致 、如何处理百万级消息积压 、海量数据Top K, 去重, 排序、 如何应对流量突然增长十倍
+
+- [ ] 业务场景题
+
+  > 回答时按照需求分析、容量估算、整体架构、核心模块、故障处理、性能瓶颈的顺序
+
+
+
+AI Agent / AI 应用开发：
+
+- [ ] 复用后端八股 + Python 基础
+- [ ] 机器学习基础、深度学习基础、Transformer、LLM
+- [ ] AI 应用： Prompt Engineering、Context Engineering、RAG、Embedding、向量数据库
+- [ ] Agent： Function Calling、Tool Use、MCP、Memory、Planning、Multi-Agent、Workflow
+- [ ] 开发框架： LangChain、LangGraph、FastAPI
+- [ ] 工程能力： Evaluation、Tracing、Guardrails、模型 API、SSE
+- [ ] 全栈能力（可选）： React、Next.js、TypeScript
+- [ ] 项目经历： 现有 Agent 项目
+
+
+
+AI Infra：分为模型服务平台、训练平台、推理引擎和底层算子优化
+
+- AI 平台 / 模型服务平台：Go、Python、K8s、微服务、模型部署、服务治理  ⭐
+- 推理服务与调度：vLLM、KV Cache、请求调度、负载均衡  ⭐
+- 训练平台 / GPU 资源调度：K8s、GPU 集群、分布式任务、容错  ⭐
+- 分布式训练框架：PyTorch、DeepSpeed、Megatron、NCCL
+- 推理引擎：C++、CUDA、Triton、MLIR、算子融合
+- GPU 底层算子优化：CUDA Kernel、GPU 架构、访存优化
+
+- [ ]  Go + Python + C++
+- [ ] 复用后端八股 + GPU 架构 + 高性能计算
+- [ ] PyTorch、Transformer、大模型原理
+
+- [ ] 大模型推理系统：Prefill 和 Decode、vLLM、SGLang、KV Cache、Batching、推理调度
+
+- [ ] 分布式训练：分布式训练、并行策略、NCCL、RDMA
+
+- [ ] Kubernetes 与云原生： Docker、Kubernetes、Operator、GPU 资源调度
+
+- [ ] 性能优化： CUDA、Triton、Profiling、Benchmark
+
+  > 至少写过 Vector Add、Matrix Multiplication、Softmax、Reduction 四类简单的 CUDA 或 Triton Kernel，并尝试对比 PyTorch 实现
+  >
+  > 投递推理引擎核心组，则需要投入更多时间学习 C++、CUDA 和 GPU Profiling
+
+AI infra相关项目：采用一个主项目加一个小型原理项目
+
+- 分布式 LLM 推理调度平台（Go + vLLM + Kubernetes）- 主项目：分布式系统、模型服务、调度和性能优化
+
+  - 推理服务网关
+  - 自定义推理调度器
+  - 缓存感知路由
+  - GPU 资源管理：GPU 显存、KV Cache、请求队列和实例状态监控
+  - 性能测试
+
+- Mini-vLLM 推理引擎（Python + PyTorch）- 小型项目：KV Cache、Batching 和模型运行机制的理解
+
+  > 开源参考：
+  >
+  > nano-vllm	小型 vLLM 实现，适合阅读源码
+  > minGPT	Transformer 基础
+  > nanoGPT	GPT 训练与生成
+  > vLLM	工业级推理引擎
+  > SGLang	推理调度及缓存优化
+  >
+  > 可以尝试给 vLLM、SGLang 或 nano-vllm 提交一个真实的 PR，例如测试覆盖、性能问题、调度逻辑或 Bug 修复。
+
+- K8s GPU 任务调度 Operator（Go + Kubernetes）
+
+  > 开源项目：
+  > Kubebuilder	Go Operator 开发
+  > Volcano	AI/HPC 批任务调度
+  > Kueue	Job 队列、配额、资源准入
+  > KServe	模型服务部署
+  > NVIDIA Device Plugin	Kubernetes GPU 资源管理
+  > Dynamo	分布式推理基础设施
+
+- Mini 分布式训练系统（PyTorch + DDP + FSDP）：证明分布式训练、显存优化和通信机制理解
+
+  - 使用一个小型 Transformer 模型，实现单卡训练、DDP、FSDP、混合精度、梯度累积、Activation Checkpointing、训练断点恢复
+
+  > 后训练算法关注奖励函数、Loss、策略优化、数据质量和模型能力；
+  >
+  > 后训练 Infra关注 Rollout 吞吐、权重同步、显存管理、分布式调度和训练效率
+
+
+
+后训练算法：Pretrained Model 预训练基础模型、 SFT / LoRA 监督微调、 DPO 偏好优化、 PPO/GRPO  强化学习后训练 、Evaluation 能力评测与对比
+
+- 基于 Qwen 系列小参数模型的后训练对比实验：选择一个数学推理或领域问答任务，完成 Base Model、SFT + LoRA、DPO 或 GRPO 的对比，记录训练 Loss、任务准确率、显存占用和失败案例。
+
+- [ ] Python + C++（推理引擎方向）
+- [ ] LeetCode Hot 100 + 机器学习算法手撕
+- [ ] 线性代数、概率统计、微积分、最优化
+- [ ] 算法八股： 机器学习、深度学习、强化学习、NLP、Transformer、LLM
+- [ ] 训练框架： PyTorch、Hugging Face、DeepSpeed、Megatron-LM
+- [ ] 后训练专项： SFT、LoRA、PEFT、RLHF、PPO、DPO、GRPO、Reward Model、数据构建、模型评估
+- [ ] 推理专项： vLLM、SGLang、KV Cache、FlashAttention、量化、推理加速
+- [ ] 底层优化： CUDA、Triton、GPU 架构、分布式训练
+- [ ] 项目经历： 大模型 SFT + DPO/GRPO 后训练实验、Mini-vLLM
+
+
+
+| 简历版本    | 核心突出内容                            |
+| ----------- | --------------------------------------- |
+| 后端开发版  | Go 实习、MySQL、Redis、MQ、并发         |
+| AI 应用版   | Agent、RAG、Evaluation、LLM Gateway     |
+| AI Infra 版 | 模型服务、推理调度、可观测性、性能优化  |
+| 全栈版      | Go API、React、TypeScript、完整系统交付 |
+
+- Go 后端开发实习真实业务场景
+- 工程化 Agent 项目——AI 应用开发、工具调用、评测、模型应用能力
+- 推理调度平台
+- Mini-vLLM 推理引擎
+- 分布式 LLM Gateway 项目——高并发、分布式、中间件、AI Infra、全栈能力
+- 小模型后训练实验（可选）PyTorch、SFT、LoRA、偏好优化、实验分析
+
+```mermaid
+flowchart TD
+    A["通用后端基础（主线）:<br/>算法 · Go · OS · 网络 · MySQL · Redis<br/>MQ · 分布式 · 并发 · 系统设计"]
+
+    B["AI 应用专项:<br/>Python · LLM · RAG<br/>Agent · MCP<br/>Evaluation · 全栈"]
+
+    C["AI Infra 专项:<br/>PyTorch · Transformer<br/>vLLM · KV Cache<br/>GPU · K8s · 推理调度"]
+
+    D["共用 Go 实习 + InferFlow + Agent"]
+
+    A --> B
+    A --> C
+    B --> D
+    C --> D
+
+    classDef backend fill:#e9f0fa,stroke:#4777b9,color:#333
+    classDef aiapp fill:#e5f5ef,stroke:#269b83,color:#333
+    classDef infra fill:#f0ebfa,stroke:#8b79c5,color:#333
+    classDef project fill:#fcf3df,stroke:#d5a04c,color:#333
+
+    class A backend
+    class B aiapp
+    class C infra
+    class D project
+```
+
+```
+求职准备
+├── 公共基础
+│   ├── LeetCode
+│   ├── 计算机基础
+│   └── 工程能力
+├── 后端专项
+│   └── Go + 后端八股 + 系统设计
+├── AI 公共基础
+│   └── Python + PyTorch + ML + DL + Transformer
+├── AI Infra 专项
+│   └── vLLM + K8s + GPU + CUDA + 分布式计算
+├── AI 应用专项
+│   └── RAG + Agent + MCP + Evaluation + 全栈
+├── 大模型后训练专项
+│   └── 数学 + RL + SFT + DPO + GRPO
+├── 大模型推理专项
+│   └── C++ + CUDA + Triton + 推理引擎
+└── 项目与实习
+    ├── Go 后端实习（已有）
+    ├── Agent（已有）
+    ├── InferFlow（必做优先）
+    ├── Mini-vLLM（推荐）
+    └── 大模型后训练实验（选做）
+```
+
+
+
+## 展现后端项目的工程能力
+
+核心不是证明你用了多少技术，而是证明你能够**独立设计**、开发、测试、部署、维护和优化一个可靠的后端系统。
+
+> 项目不能停留在实现业务功能、调用框架和 CRUD。
+>
+> 需要展现的是：当系统面临高并发、数据不一致、服务故障、资源不足等问题时，你能够如何解决
+
+| 能力           | 如何在项目中体现                       | 可以展示的成果          |
+| -------------- | -------------------------------------- | ----------------------- |
+| **架构设计**   | 模块划分、分层架构、接口抽象、依赖管理 | 架构图、设计文档        |
+| 代码质量       | 代码规范、低耦合、错误处理、可扩展性   | GitHub 源码             |
+| **并发**能力   | Worker Pool、并发控制、资源回收        | 并发测试、Race Detector |
+| **数据**管理   | SQL 优化、事务、缓存一致性、索引设计   | Explain、优化前后对比   |
+| 系统**可靠性** | 幂等、重试、限流、熔断、故障恢复       | 故障注入测试            |
+| **性能优化**   | 压测、Profiling、连接池、内存优化      | Benchmark、火焰图       |
+| **可观测性**   | Logging、Metrics、Tracing、告警        | Grafana Dashboard       |
+| **工程化交付** | 单元测试、集成测试、Docker、CI/CD      | 自动化测试与部署流程    |
+
+> 技术栈本身不是亮点，使用技术解决问题的过程才是亮点
+
+1. 清晰的代码组织
+2. 完整的工程架构
+3. 完整的 README ：尤其是 Design Decisions 和 Known Limitations
+
+- 性能压测与优化
+- 故障注入与可靠性测试
+- 可观测性：Logging、Metrics、Tracing
+- 自动化测试
+
+
+
+先设计一个存在真实技术问题的业务场景，再引入中间件解决问题，最后通过实验验证方案。
+
+分布式能力：需要让多个服务实例共同完成任务，并处理网络通信、共享状态和部分节点故障等问题。
+
+| 分布式模块            | 实现内容                                    |
+| --------------------- | ------------------------------------------- |
+| 分布式网关            | 多 Gateway 实例                             |
+| 分布式限流            | Redis 共享限流状态                          |
+| 分布式任务执行        | Kafka + 多 Worker                           |
+| 服务间通信            | gRPC                                        |
+| 服务注册与发现        | etcd 或 Kubernetes                          |
+| 分布式调度 - 负载均衡 | Round Robin、Least Outstanding、Token-aware |
+| 故障检测              | Health Check、Heartbeat                     |
+| 服务容错              | Timeout、Retry、Circuit Breaker             |
+| 数据一致性            | Outbox、幂等、最终一致性                    |
+| 资源管理              | Worker Pool、背压、任务优先级               |
+| 链路追踪              | OpenTelemetry                               |
+
+能否正确设计系统、判断技术方案、理解代码行为、发现问题并保证交付质量。
+
+| 不需要纠结的内容             | 是否需要记忆   |
+| ---------------------------- | -------------- |
+| Redis Go SDK 的具体 API 名称 | 不需要         |
+| Kafka 客户端的具体调用方式   | 不需要         |
+| Gin 框架的所有 API           | 不需要         |
+| GORM 的具体查询语法          | 不需要全部记忆 |
+| Docker Compose 配置文件语法  | 不需要全部记忆 |
+| Kubernetes YAML 的具体字段   | 不需要全部记忆 |
+| Prometheus SDK 的调用方式    | 不需要         |
+| **常规 CRUD 的模板代码**     | **熟悉即可**   |
+| 第三方库的初始化代码         | 不需要         |
+| 各种中间件的完整源码         | 不需要         |
+
+> 具体代码可以查，但代码背后的逻辑必须是自己理解
+
+| 必须真正掌握的内容   | 掌握要求       |
+| -------------------- | -------------- |
+| Go 基础语法          | 熟练编写       |
+| Go 并发编程          | 能独立实现     |
+| 算法与数据结构       | 能独立手写     |
+| **中间件的适用场景** | 熟练判断       |
+| 中间件的**核心原理** | 能够解释       |
+| **业务流程设计**     | 能够独立设计   |
+| 数据库**表结构设计** | 能够独立设计   |
+| **API 接口设计**     | 能够独立设计   |
+| 事务与一致性         | 能够正确处理   |
+| **异常与边界情况**   | 能够主动识别   |
+| 系统架构与技术选型   | 能够解释取舍   |
+| Debug 与性能分析     | 能够实际操作   |
+| 代码阅读与 Review    | 能够判断正确性 |
+| 测试与可靠性验证     | 能够独立完成   |
+
+```
+理解业务需求
+业务目标、约束、边界条件
+
+技术方案设计
+API、数据库、业务流程、中间件选型
+
+阅读现有代码
+理解已有架构、复用公共组件
+
+编写业务代码
+文档、已有实现、编程
+
+测试与 Debug
+正常流程、异常流程、并发与一致性
+
+Code Review
+正确性、可维护性、性能、安全性
+
+部署与上线
+CI/CD、灰度发布、回滚
+
+监控与迭代
+日志、指标、故障排查、性能优化
+```
+
+> 真正困难的往往不是编写 CRUD，而是确定：
+>
+> - 数据应该存在哪里？
+> - 哪些操作必须在同一个事务中？
+> - 并发请求是否会导致数据错误？
+> - 下游服务失败了怎么办？
+> - 请求重复提交了怎么办？
+> - 如何兼容历史数据和已有接口？
+> - 如何保证上线不影响现有业务？
+
+个人项目可以采用下面这种方式：
+
+| 步骤          | 自己负责     | AI 辅助      |
+| ------------- | ------------ | ------------ |
+| 业务需求分析  | 主要负责     | 补充建议     |
+| 系统架构设计  | 主要负责     | 提供备选方案 |
+| 数据库设计    | 理解并决定   | 辅助生成 SQL |
+| 中间件选型    | 理解并决定   | 对比方案     |
+| 核心业务逻辑  | 理解并实现   | 辅助编写     |
+| CRUD 模板代码 | Review       | 生成         |
+| SDK 调用代码  | 理解行为     | 生成         |
+| 配置文件      | 理解配置含义 | 生成         |
+| 单元测试      | 设计测试场景 | 辅助编写     |
+| Debug         | 分析与验证   | 辅助定位     |
+| 性能优化      | 分析与决策   | 提供建议     |
+| 技术文档      | 确保准确性   | 辅助整理     |
+
+1. 为什么需要这个功能？
+2. 为什么选择这个技术？
+3. 整个业务流程是什么？
+4. 核心实现原理是什么？
+5. 并发和异常情况下会发生什么？
+6. 如何验证实现的正确性和性能？
+7. 如果规模扩大十倍，应该如何改进？

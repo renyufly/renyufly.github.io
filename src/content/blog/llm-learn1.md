@@ -285,6 +285,15 @@ Harness 具体负责：
 
 
 
+LLM 方向：
+
+- 做Benchmark、垂直领域的深度基准
+- 评测防作弊、Agent评测
+- 推理优化：Training-free   [ KVCache淘汰策略 ]  [ 投机解码 ]
+- 轻量级后训练：避免reward hacking、小模型激发能力、高效蒸馏
+
+
+
 
 
 ## 具身智能+机器人
